@@ -1,25 +1,29 @@
 import Foundation
 import SwiftUI
 import ComposableArchitecture
-//import ApiClient
 
 @Reducer
-struct SplashFeature {
+public struct SplashFeature {
     @Dependency(\.apiClient) var apiClient
 }
 
 extension SplashFeature {
     @ObservableState
-    struct State: Equatable {}
+    public struct State: Equatable {}
     
-    enum Action: Equatable {
+    public enum Action: Equatable {
         case onAppear
         case loadSymbols
+        case delegate(DelegateAction)
+        
+        public enum DelegateAction {
+            case loadingFinished
+        }
     }
 }
 
 extension SplashFeature {
-    var body: some Reducer<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
@@ -29,7 +33,10 @@ extension SplashFeature {
             case .loadSymbols:
                 return .run { send in
                     print(try await apiClient.getOrderbook(AssetPair(symbol: .init(to: "USDT", from: "ETH"), limit: 10)))
+                    await send(.delegate(.loadingFinished))
                 }
+            case .delegate(.loadingFinished):
+                return .none
             }
             
         }
