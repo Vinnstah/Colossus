@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 @main
-struct MyApp: App {
+struct Colossus: App {
     var body: some Scene {
         WindowGroup {
             AppFeature.View(
