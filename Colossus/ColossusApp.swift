@@ -1,5 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
+import SwiftData
 
 @main
 struct Colossus: App {
@@ -8,10 +9,9 @@ struct Colossus: App {
             AppFeature.View(
                 store: Store(initialState: AppFeature.State()) {
                     AppFeature()
-                        ._printChanges()
+//                        ._printChanges()
                 }
             )
-            
         }
     }
 }

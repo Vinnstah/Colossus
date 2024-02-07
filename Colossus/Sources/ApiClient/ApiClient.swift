@@ -3,7 +3,7 @@ import Foundation
 import DependenciesAdditions
 
 public struct ApiClient: DependencyKey {
-    public typealias GetSymbols = @Sendable (String) async throws -> ([Symbol])
+    public typealias GetSymbols = @Sendable () async throws -> ([Symbol])
     public typealias GetOrderbook = @Sendable (AssetPair) async throws -> (AnonymousOrderBook)
     public var getSymbols: GetSymbols
     public var getOrderbook: GetOrderbook
@@ -50,17 +50,13 @@ extension ApiClient {
             var urlRequest = URLRequest(url: url)
             
             urlRequest.httpMethod = method.discriminator.rawValue
-//            if case let .post(data) = method {
-//                urlRequest.httpBody = data
-//            }
             
-//            guard let apiKey = ProcessInfo.processInfo.environment["API_KEY"] else {
-//                fatalError("Did you forget to export API_KEY environment variable?")
-//            }
-//            let apiKey = "B6nBSGzFJlNM8li5dSOhvvgETTM0xaPjMu85bgStuzmEwe3s58LxnvU0fRS6aEBp"
+            if case let .post(data) = method {
+                urlRequest.httpBody = data
+            }
+            
             
             urlRequest.allHTTPHeaderFields = [
-//                "X-MBX-APIKEY": apiKey,
                 "Content-Type": "application/json"
             ]
             print(urlRequest)
@@ -76,7 +72,6 @@ extension ApiClient {
                 print(url.pathComponents)
                 fatalError("Handle API Errors")
             }
-            //            debugPrint("Received body: '\(data.prettyPrinted())'")
             return try decode(T.self, from: data)
         }
         
@@ -90,7 +85,8 @@ extension ApiClient {
         
         return Self(
             getSymbols: {
-                try await get(Symbol.self as? QueryItemsExpressible, path: $0, decodeAs: [Symbol].self)
+                print("123")
+                return try await get(nil, path: "symbols", decodeAs: [Symbol].self)
             },
             getOrderbook: { assetPair in
                 try await get(assetPair, path: "orderbooks", decodeAs: AnonymousOrderBook.self)

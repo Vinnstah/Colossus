@@ -1,17 +1,18 @@
 import Foundation
+import SwiftData
 
 public protocol QueryItemsExpressible {
     var queryItems: [URLQueryItem] { get }
 }
-public protocol QueryItemExpressible: QueryItemsExpressible {
-    var queryItem: URLQueryItem { get }
-}
-extension QueryItemExpressible {
-    public var queryItems: [URLQueryItem] { [queryItem] }
-}
 
-
-import Foundation
+@Model
+final class SymbolSwiftData {
+    var symbol: AnonymousOrderBook
+    
+    init(symbol: AnonymousOrderBook) {
+        self.symbol = symbol
+    }
+}
 
 // MARK: - IncomingOrder
 public struct Symbol: Codable, Equatable {
@@ -109,6 +110,11 @@ public struct AssetPair: Sendable, Hashable, QueryItemsExpressible, Codable {
     }
     
     public struct Symbol: Sendable, Hashable, Codable {
+        internal init(to: String, from: String) {
+            self.to = to
+            self.from = from
+        }
+        
         public let to: String
         public let from: String
         public var description: String {
