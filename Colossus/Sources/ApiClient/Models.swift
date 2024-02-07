@@ -5,15 +5,6 @@ public protocol QueryItemsExpressible {
     var queryItems: [URLQueryItem] { get }
 }
 
-@Model
-final class SymbolSwiftData {
-    var symbol: AnonymousOrderBook
-    
-    init(symbol: AnonymousOrderBook) {
-        self.symbol = symbol
-    }
-}
-
 // MARK: - IncomingOrder
 public struct Symbol: Codable, Equatable {
     public let symbolid, exchangeid, symbolType, assetidBase: String?

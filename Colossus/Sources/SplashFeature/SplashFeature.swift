@@ -7,14 +7,12 @@ import SwiftData
 public struct SplashFeature {
     @Dependency(\.apiClient) var apiClient
     @Dependency(\.continuousClock) var clock
-    @Environment(\.modelContext) private var context
+    @Dependency(\.userDefaults) var userDefaults
 }
 
 extension SplashFeature {
     @ObservableState
     public struct State {
-        let dataSource: SymbolDataSource = .shared
-        var symbols: [SymbolSwiftData] = []
     }
     
     public enum Action: Equatable {
@@ -22,9 +20,10 @@ extension SplashFeature {
         case loadSymbols
         case symbolResult(AnonymousOrderBook)
         case delegate(DelegateAction)
+        case userOnboarded(Bool)
         
-        public enum DelegateAction {
-            case loadingFinished
+        public enum DelegateAction: Equatable {
+            case loadingFinished(onboarded: Bool)
         }
     }
 }
@@ -34,31 +33,36 @@ extension SplashFeature {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state.symbols = state.dataSource.fetchItems()
-                print(state.symbols.first!.symbol)
                 return .run { send in
-                    await send(.loadSymbols)
+                    await send(.userOnboarded(userDefaults.bool(forKey: .userOnboarded) ?? false))
                 }
                 
             case .loadSymbols:
                 return .run { send in
-//                    print(try context.fetch(descriptor))
-//                    print(try await apiClient.getOrderbook(AssetPair(symbol: .init(to: "USDT", from: "ETH"), limit: 10)))
-//                    await send(.symbolResult(try await apiClient.getOrderbook(AssetPair(symbol: .init(to: "USDT", from: "ETH"), limit: 10))))
-//                    try await clock.sleep(for: .milliseconds(800))
-                    await send(.delegate(.loadingFinished))
+                    Task {
+                        
+                        print(try await apiClient.getSymbols())
+                    }
+                    //                    print(try await apiClient.getOrderbook(AssetPair(symbol: .init(to: "USDT", from: "ETH"), limit: 10)))
+                    //                    await send(.symbolResult(try await apiClient.getOrderbook(AssetPair(symbol: .init(to: "USDT", from: "ETH"), limit: 10))))
+                    try await clock.sleep(for: .milliseconds(1500))
+                    await send(.delegate(.loadingFinished(onboarded: false)))
                 }
-            case .delegate(.loadingFinished):
+            case let .symbolResult(symbol):
                 return .none
                 
-            case let .symbolResult(symbol):
-                print("1")
-//                state.symbols.append(.init(symbol: symbol))
-//                state.dataSource.appendItem(item: symbol)
-//                state.symbols.forEach({ state.dataSource.appendItem(item: $0) })
-//                SymbolDataSource.shared.appendItem(item: .init(symbol: symbol))
-//                state.dataSource.appendItem(item: .init(symbol: symbol))
-//                print(symbol)
+            case let .userOnboarded(onboardedStatus):
+                switch onboardedStatus {
+                case true:
+                    return .run { send in
+                        await send(.delegate(.loadingFinished(onboarded: true)))
+                    }
+                case false:
+                    return .run { send in
+                        await send(.loadSymbols)
+                    }
+                }
+            case .delegate:
                 return .none
             }
             
@@ -79,37 +83,6 @@ extension SplashFeature {
     }
 }
 
-final class SymbolDataSource {
-    private let modelContainer: ModelContainer
-    private let modelContext: ModelContext
-
-    @MainActor
-    static let shared = SymbolDataSource()
-
-    @MainActor
-    private init() {
-        self.modelContainer = try! ModelContainer(for: SymbolSwiftData.self)
-        self.modelContext = modelContainer.mainContext
-    }
-
-    func appendItem(item: SymbolSwiftData) {
-        modelContext.insert(item)
-        do {
-            try modelContext.save()
-        } catch {
-            fatalError(error.localizedDescription)
-        }
-    }
-
-    func fetchItems() -> [SymbolSwiftData] {
-        do {
-            return try modelContext.fetch(FetchDescriptor<SymbolSwiftData>())
-        } catch {
-            fatalError(error.localizedDescription)
-        }
-    }
-
-    func removeItem(_ item: SymbolSwiftData) {
-        modelContext.delete(item)
-    }
+extension String {
+    static let userOnboarded: String = "userOnboarded"
 }
