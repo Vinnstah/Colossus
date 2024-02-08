@@ -59,7 +59,8 @@ extension ApiClient {
             urlRequest.allHTTPHeaderFields = [
                 "Content-Type": "application/json"
             ]
-            print(urlRequest)
+            urlRequest.timeoutInterval = 180
+            
             let (data, urlResponse) = try await urlSession.data(for: urlRequest)
             
             guard let httpURLResponse = urlResponse as? HTTPURLResponse else {
@@ -85,7 +86,6 @@ extension ApiClient {
         
         return Self(
             getSymbols: {
-                print("123")
                 return try await get(nil, path: "symbols", decodeAs: [Symbol].self)
             },
             getOrderbook: { assetPair in

@@ -40,7 +40,6 @@ extension SplashFeature {
             case .loadSymbols:
                 return .run { send in
                     Task {
-                        
                         print(try await apiClient.getSymbols())
                     }
                     //                    print(try await apiClient.getOrderbook(AssetPair(symbol: .init(to: "USDT", from: "ETH"), limit: 10)))
