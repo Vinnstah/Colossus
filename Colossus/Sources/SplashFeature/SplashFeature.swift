@@ -40,9 +40,8 @@ extension SplashFeature {
             case .loadSymbols:
                 return .run { send in
                     Task {
-                        print(try await apiClient.getSymbols())
                     }
-                    //                    print(try await apiClient.getOrderbook(AssetPair(symbol: .init(to: "USDT", from: "ETH"), limit: 10)))
+                    print(try await apiClient.getOrderbook(AssetPair(symbol: .init(to: "USDT", from: "ETH"), limit: 10)))
                     //                    await send(.symbolResult(try await apiClient.getOrderbook(AssetPair(symbol: .init(to: "USDT", from: "ETH"), limit: 10))))
                     try await clock.sleep(for: .milliseconds(1500))
                     await send(.delegate(.loadingFinished(onboarded: false)))

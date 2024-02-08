@@ -21,10 +21,10 @@
 		E57A07452B69A05600820ED1 /* _NotificationDependency in Frameworks */ = {isa = PBXBuildFile; productRef = E57A07442B69A05600820ED1 /* _NotificationDependency */; };
 		E57A07472B69A05600820ED1 /* _SwiftUIDependency in Frameworks */ = {isa = PBXBuildFile; productRef = E57A07462B69A05600820ED1 /* _SwiftUIDependency */; };
 		E599609A2B6EF7B600C0882C /* MainFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59960992B6EF7B600C0882C /* MainFeature.swift */; };
-		E5F784572B70307600D576AA /* OnboardingFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F784562B70307600D576AA /* OnboardingFeature.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E52E6E402B75626400B07495 /* Journal.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Journal.md; sourceTree = "<group>"; };
 		E57A071D2B6976D000820ED1 /* Colossus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Colossus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E57A07202B6976D000820ED1 /* ColossusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColossusApp.swift; sourceTree = "<group>"; };
 		E57A07242B6976D200820ED1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -34,7 +34,6 @@
 		E57A07332B6976F800820ED1 /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		E57A07352B6976F800820ED1 /* AppFeature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		E59960992B6EF7B600C0882C /* MainFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeature.swift; sourceTree = "<group>"; };
-		E5F784562B70307600D576AA /* OnboardingFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFeature.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +76,7 @@
 				E57A072E2B6976F800820ED1 /* Sources */,
 				E57A07242B6976D200820ED1 /* Assets.xcassets */,
 				E57A07262B6976D200820ED1 /* Preview Content */,
+				E52E6E402B75626400B07495 /* Journal.md */,
 			);
 			path = Colossus;
 			sourceTree = "<group>";
@@ -92,7 +92,6 @@
 		E57A072E2B6976F800820ED1 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				E5F784552B70306D00D576AA /* OnboardingFeature */,
 				E59960982B6EF7AD00C0882C /* MainFeature */,
 				E57A072F2B6976F800820ED1 /* SplashFeature */,
 				E57A07312B6976F800820ED1 /* ApiClient */,
@@ -132,14 +131,6 @@
 				E59960992B6EF7B600C0882C /* MainFeature.swift */,
 			);
 			path = MainFeature;
-			sourceTree = "<group>";
-		};
-		E5F784552B70306D00D576AA /* OnboardingFeature */ = {
-			isa = PBXGroup;
-			children = (
-				E5F784562B70307600D576AA /* OnboardingFeature.swift */,
-			);
-			path = OnboardingFeature;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -226,7 +217,6 @@
 			files = (
 				E57A07392B6976F800820ED1 /* AppFeature.swift in Sources */,
 				E57A07362B6976F800820ED1 /* SplashFeature.swift in Sources */,
-				E5F784572B70307600D576AA /* OnboardingFeature.swift in Sources */,
 				E57A07212B6976D000820ED1 /* ColossusApp.swift in Sources */,
 				E57A07372B6976F800820ED1 /* ApiClient.swift in Sources */,
 				E57A07382B6976F800820ED1 /* Models.swift in Sources */,
