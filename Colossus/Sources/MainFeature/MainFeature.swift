@@ -19,6 +19,7 @@ struct MainFeature {
 
 extension MainFeature {
     struct View: SwiftUI.View {
+        let store: StoreOf<MainFeature>
         var body: some SwiftUI.View {
             Text("MAIN")
         }

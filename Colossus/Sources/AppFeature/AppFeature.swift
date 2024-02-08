@@ -5,52 +5,38 @@ import SwiftUI
 @Reducer
 struct AppFeature {
     @ObservableState
-    struct State {
-        @Presents var destination: Destination.State?
-    }
-    enum Action {
-        case destination(PresentationAction<Destination.Action>)
-        case onAppear
+    public enum State {
+        case splash(SplashFeature.State)
+        case main(MainFeature.State)
+        
+        public init() {
+            self = .splash(SplashFeature.State())
+        }
     }
     
-    var body: some Reducer<State, Action> {
+    public enum Action {
+        case splash(SplashFeature.Action)
+        case main(MainFeature.Action)
+    }
+    
+    public var body: some Reducer<State, Action> {
+        Scope(state: \.splash , action: \.splash) {
+            SplashFeature()
+        }
+        Scope(state: \.main , action: \.main) {
+            MainFeature()
+        }
+        
         Reduce { state, action in
             switch action {
-            case .destination(.presented(.splash(.delegate(.loadingFinished)))):
-                state.destination = .main(.init())
+                
+            case let .splash(.delegate(.isLoggedIn(isLoggedIn))):
+                precondition(!isLoggedIn, "Onboarding not yet implemented")
+                state = .main(MainFeature.State())
                 return .none
                 
-            case .destination(_):
+            case .splash:
                 return .none
-            case .onAppear:
-                state.destination = .splash(.init())
-                return .none
-            }
-        }
-        .ifLet(\.$destination, action: \.destination) {
-            Destination()
-        }
-    }
-    
-    @Reducer
-    struct Destination {
-        @ObservableState
-        public enum State {
-            case splash(SplashFeature.State)
-            case main(MainFeature.State)
-        }
-        
-        public enum Action {
-            case splash(SplashFeature.Action)
-            case main(MainFeature.Action)
-        }
-        
-        public var body: some Reducer<State, Action> {
-            Scope(state: \.splash , action: \.splash) {
-                SplashFeature()
-            }
-            Scope(state: \.main , action: \.main) {
-                MainFeature()
             }
         }
     }
@@ -58,23 +44,18 @@ struct AppFeature {
 
 extension AppFeature {
     struct View: SwiftUI.View {
-        @Bindable var store: StoreOf<AppFeature>
+        let store: StoreOf<AppFeature>
         
         public var body: some SwiftUI.View {
-            NavigationStack {
-                MainFeature.View()
-                    .task {
-                        store.send(.onAppear)
-                        
-                    }
-                    .navigationDestination(
-                        item: $store.scope(
-                            state: \.destination?.splash,
-                            action: \.destination.splash
-                        )
-                    ) { store in
-                        SplashFeature.View(store: store)
-                    }
+            switch store.state {
+            case .splash:
+                if let store = store.scope(state: \.splash, action: \.splash) {
+                    SplashFeature.View(store: store)
+                }
+            case .main:
+                if let store = store.scope(state: \.main, action: \.main) {
+                    MainFeature.View(store: store)
+                }
             }
         }
     }

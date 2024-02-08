@@ -15,68 +15,50 @@ extension SplashFeature {
     public struct State {
     }
     
-    public enum Action: Equatable {
-        case onAppear
-        case loadSymbols
-        case symbolResult(AnonymousOrderBook)
+    public enum Action: ViewAction {
         case delegate(DelegateAction)
-        case userOnboarded(Bool)
+        case view(View)
+        
+        public enum View {
+            case onAppear
+        }
         
         public enum DelegateAction: Equatable {
-            case loadingFinished(onboarded: Bool)
+            case isLoggedIn(Bool)
         }
     }
 }
+
 
 extension SplashFeature {
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .onAppear:
-                return .run { send in
-                    await send(.userOnboarded(userDefaults.bool(forKey: .userOnboarded) ?? false))
-                }
                 
-            case .loadSymbols:
-                return .run { send in
-                    Task {
+            case .view(.onAppear):
+                    .run { send in
+                        try await clock.sleep(for: .milliseconds(800))
+                        let isLoggedIn = userDefaults.bool(forKey: .userOnboarded) ?? false
+                        await send(.delegate(.isLoggedIn(isLoggedIn)))
                     }
-                    print(try await apiClient.getOrderbook(AssetPair(symbol: .init(to: "USDT", from: "ETH"), limit: 10)))
-                    //                    await send(.symbolResult(try await apiClient.getOrderbook(AssetPair(symbol: .init(to: "USDT", from: "ETH"), limit: 10))))
-                    try await clock.sleep(for: .milliseconds(1500))
-                    await send(.delegate(.loadingFinished(onboarded: false)))
-                }
-            case let .symbolResult(symbol):
-                return .none
                 
-            case let .userOnboarded(onboardedStatus):
-                switch onboardedStatus {
-                case true:
-                    return .run { send in
-                        await send(.delegate(.loadingFinished(onboarded: true)))
-                    }
-                case false:
-                    return .run { send in
-                        await send(.loadSymbols)
-                    }
-                }
             case .delegate:
-                return .none
+                    .none
             }
-            
         }
     }
 }
 
 extension SplashFeature {
     
+    @ViewAction(for: SplashFeature.self)
     struct View: SwiftUI.View {
         let store: StoreOf<SplashFeature>
         var body: some SwiftUI.View {
             Text("Loading Colossus...")
-                .onAppear(perform: {
-                    store.send(.onAppear)
-                })
+                .onAppear {
+                    send(.onAppear)
+                }
         }
     }
 }
