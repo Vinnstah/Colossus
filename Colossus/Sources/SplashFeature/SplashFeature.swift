@@ -5,7 +5,6 @@ import SwiftData
 
 @Reducer
 public struct SplashFeature {
-    @Dependency(\.apiClient) var apiClient
     @Dependency(\.continuousClock) var clock
     @Dependency(\.userDefaults) var userDefaults
 }

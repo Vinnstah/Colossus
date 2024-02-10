@@ -35,7 +35,7 @@ struct AppFeature {
                 state = .main(MainFeature.State())
                 return .none
                 
-            case .splash:
+            case .splash, .main:
                 return .none
             }
         }

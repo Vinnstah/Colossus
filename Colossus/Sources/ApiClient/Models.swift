@@ -127,6 +127,17 @@ extension AssetPair {
     }
 }
 
+extension AssetPair {
+    public static let listOfAssetPairs: [Self] = [
+        AssetPair(symbol: .init(to: "USDT", from: "ETH"), limit: 1),
+        AssetPair(symbol: .init(to: "USDT", from: "BTC"), limit: 1),
+        AssetPair(symbol: .init(to: "USDT", from: "BNB"), limit: 1),
+        AssetPair(symbol: .init(to: "USDT", from: "SOL"), limit: 1),
+        AssetPair(symbol: .init(to: "USDT", from: "XRP"), limit: 1),
+        AssetPair(symbol: .init(to: "USDT", from: "ADA"), limit: 1)
+    ]
+}
+
 public struct AnonymousOrderBook: Sendable, Hashable, Codable {
     public struct Order: Sendable, Hashable, Codable, CustomStringConvertible {
         public let price: String
