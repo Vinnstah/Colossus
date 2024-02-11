@@ -59,7 +59,7 @@ extension ApiClient {
             urlRequest.allHTTPHeaderFields = [
                 "Content-Type": "application/json"
             ]
-            urlRequest.timeoutInterval = 180
+            urlRequest.timeoutInterval = 10
             
             let (data, urlResponse) = try await urlSession.data(for: urlRequest)
             

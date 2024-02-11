@@ -5,15 +5,12 @@ import ComposableArchitecture
 @Reducer
 public struct MainFeature {
     @Dependency(\.apiClient) var apiClient
-}
-
-extension MainFeature {
+    
     @ObservableState
     public struct State: Equatable {
         @Presents var alert: AlertState<MainFeature.Action.Alert>?
-        var orderBooks: [OrderBook] = []
-        var symbols: [AssetPair] = AssetPair.listOfAssetPairs
-        var isLoading: Bool = false
+        fileprivate var orderBooks: [OrderBook] = []
+        fileprivate var symbols: [AssetPair] = AssetPair.listOfAssetPairs
     }
     
     public enum Action: ViewAction {
@@ -23,6 +20,7 @@ extension MainFeature {
         
         public enum Alert: Equatable {
             case dissmissed
+            case retry
         }
         
         public enum View {
@@ -33,8 +31,8 @@ extension MainFeature {
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+                
             case .view(.onAppear):
-                state.isLoading = true
                 return .run { [symbols = state.symbols] send in
                     for assetPair in symbols {
                         let result = await Result {
@@ -49,15 +47,16 @@ extension MainFeature {
             case let .orderbookResult(.success(orderbook), assetPair):
                 let orderbook = OrderBook(pair: assetPair, fetchedOrderBook: orderbook)
                 state.orderBooks.append(orderbook)
-                state.isLoading = false
                 print(orderbook)
                 return .none
                 
             case let .orderbookResult(.failure(error), assetPair):
-                /// TODO: Alert is not working
                 state.alert = AlertState {
                     TextState("Alert!")
                 } actions: {
+                    ButtonState(action: .send(.retry)) {
+                        TextState("Try Again")
+                    }
                     ButtonState(role: .cancel) {
                         TextState("Cancel")
                     }
@@ -66,6 +65,10 @@ extension MainFeature {
                 }
                 return .none
                 
+            case .alert(.presented(.retry)):
+                state.alert = nil
+                return .run { send in
+                    await send(.view(.onAppear)) }
                 
             case .alert:
                 return .none
@@ -79,29 +82,50 @@ extension MainFeature {
     public struct View: SwiftUI.View {
         @Bindable public var store: StoreOf<MainFeature>
         public var body: some SwiftUI.View {
-            VStack {
-                if !store.isLoading {
-                    List {
-                        ForEach(store.orderBooks, id: \.self) { orderBook in
-                            VStack {
-                                HStack {
-                                    Text(orderBook.pair.symbol.from.description)
-                                    Image(orderBook.pair.symbol.from)
+                NavigationStack {
+                    ZStack {
+                        Color.background.ignoresSafeArea()
+                        VStack {
+                            ScrollView {
+                                ForEach(store.orderBooks, id: \.self) { orderBook in
+                                    SymbolListItem(orderBook: orderBook)
                                 }
-                                Text("Highest bid \(orderBook.fetchedOrderBook.highestBid?.description ?? "--")")
-                                Text("Lowest ask \(orderBook.fetchedOrderBook.lowestAsk?.description ?? "--")")
                             }
                         }
                     }
-                } else {
-                    Text("Loading")
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Text("Add Coin")
+                        }
+                    }
+                    .onAppear {
+                        send(.onAppear)
+                    }
+                    .alert($store.scope(state: \.alert, action: \.alert))
                 }
-            }
-            .onAppear {
-                send(.onAppear)
             }
         }
     }
+
+struct SymbolListItem: View {
+    let orderBook: OrderBook
+    
+    var body: some View {
+        VStack {
+            HStack(alignment: .firstTextBaseline) {
+                Image(orderBook.pair.symbol.from)
+                    .resizable()
+                    .frame(width: 25, height: 25)
+                Text(orderBook.pair.symbol.from.description)
+                    .font(.title2)
+                Spacer()
+            }
+            Text("Highest bid \(orderBook.fetchedOrderBook.highestBid?.description ?? "--")")
+            Text("Lowest ask \(orderBook.fetchedOrderBook.lowestAsk?.description ?? "--")")
+        }
+        .frame(maxWidth: .infinity, maxHeight: 100)
+        .padding(15)
+        .background(Color.accentColor)
+        .presentationCornerRadius(25)
+    }
 }
-
-

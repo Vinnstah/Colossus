@@ -1,5 +1,5 @@
 import Foundation
-import SwiftData
+import SwiftUI
 
 public protocol QueryItemsExpressible {
     var queryItems: [URLQueryItem] { get }
@@ -136,6 +136,11 @@ extension AssetPair {
         AssetPair(symbol: .init(to: "USDT", from: "XRP"), limit: 1),
         AssetPair(symbol: .init(to: "USDT", from: "ADA"), limit: 1)
     ]
+}
+
+public struct Coin {
+    let assetPair: AssetPair
+    let image: Image
 }
 
 public struct AnonymousOrderBook: Sendable, Hashable, Codable {
