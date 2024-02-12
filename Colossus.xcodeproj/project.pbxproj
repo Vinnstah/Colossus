@@ -21,6 +21,7 @@
 		E57A07452B69A05600820ED1 /* _NotificationDependency in Frameworks */ = {isa = PBXBuildFile; productRef = E57A07442B69A05600820ED1 /* _NotificationDependency */; };
 		E57A07472B69A05600820ED1 /* _SwiftUIDependency in Frameworks */ = {isa = PBXBuildFile; productRef = E57A07462B69A05600820ED1 /* _SwiftUIDependency */; };
 		E599609A2B6EF7B600C0882C /* MainFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59960992B6EF7B600C0882C /* MainFeature.swift */; };
+		E5E882DB2B7A18510021B712 /* MainFeature+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E882DA2B7A18510021B712 /* MainFeature+View.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		E57A07332B6976F800820ED1 /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		E57A07352B6976F800820ED1 /* AppFeature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		E59960992B6EF7B600C0882C /* MainFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeature.swift; sourceTree = "<group>"; };
+		E5E882DA2B7A18510021B712 /* MainFeature+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainFeature+View.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				E59960992B6EF7B600C0882C /* MainFeature.swift */,
+				E5E882DA2B7A18510021B712 /* MainFeature+View.swift */,
 			);
 			path = MainFeature;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 				E57A07212B6976D000820ED1 /* ColossusApp.swift in Sources */,
 				E57A07372B6976F800820ED1 /* ApiClient.swift in Sources */,
 				E57A07382B6976F800820ED1 /* Models.swift in Sources */,
+				E5E882DB2B7A18510021B712 /* MainFeature+View.swift in Sources */,
 				E599609A2B6EF7B600C0882C /* MainFeature.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

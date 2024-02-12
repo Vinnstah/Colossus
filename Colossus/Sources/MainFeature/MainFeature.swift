@@ -9,14 +9,16 @@ public struct MainFeature {
     @ObservableState
     public struct State: Equatable {
         @Presents var alert: AlertState<MainFeature.Action.Alert>?
-        fileprivate var orderBooks: [OrderBook] = []
-        fileprivate var symbols: [AssetPair] = AssetPair.listOfAssetPairs
+        var path = StackState<Path.State>()
+        var orderBooks: [OrderBook] = []
+        var symbols: [AssetPair] = AssetPair.listOfAssetPairs
     }
     
     public enum Action: ViewAction {
         case alert(PresentationAction<Alert>)
         case orderbookResult(Result<AnonymousOrderBook, Swift.Error>, AssetPair)
         case view(View)
+        case path(StackAction<Path.State, Path.Action>)
         
         public enum Alert: Equatable {
             case dissmissed
@@ -25,6 +27,7 @@ public struct MainFeature {
         
         public enum View {
             case onAppear
+            case addCoin
         }
     }
     
@@ -70,62 +73,35 @@ public struct MainFeature {
                 return .run { send in
                     await send(.view(.onAppear)) }
                 
-            case .alert:
+            case .view(.addCoin):
+                state.path.append(.addItem)
                 return .none
+                
+            case .alert, .path:
+                return .none
+                    
             }
+        }
+        .forEach(\.path, action: \.path) {
+          Path()
         }
     }
 }
 
-extension MainFeature {
-    @ViewAction(for: MainFeature.self)
-    public struct View: SwiftUI.View {
-        @Bindable public var store: StoreOf<MainFeature>
-        public var body: some SwiftUI.View {
-                NavigationStack {
-                    ZStack {
-                        Color.background.ignoresSafeArea()
-                        VStack {
-                            ScrollView {
-                                ForEach(store.orderBooks, id: \.self) { orderBook in
-                                    SymbolListItem(orderBook: orderBook)
-                                }
-                            }
-                        }
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .confirmationAction) {
-                            Text("Add Coin")
-                        }
-                    }
-                    .onAppear {
-                        send(.onAppear)
-                    }
-                    .alert($store.scope(state: \.alert, action: \.alert))
-                }
-            }
-        }
+@Reducer
+public struct Path {
+    @ObservableState
+    public enum State {
+        case addItem
     }
-
-struct SymbolListItem: View {
-    let orderBook: OrderBook
     
-    var body: some View {
-        VStack {
-            HStack(alignment: .firstTextBaseline) {
-                Image(orderBook.pair.symbol.from)
-                    .resizable()
-                    .frame(width: 25, height: 25)
-                Text(orderBook.pair.symbol.from.description)
-                    .font(.title2)
-                Spacer()
-            }
-            Text("Highest bid \(orderBook.fetchedOrderBook.highestBid?.description ?? "--")")
-            Text("Lowest ask \(orderBook.fetchedOrderBook.lowestAsk?.description ?? "--")")
+    public enum Action {
+        case addItem
+    }
+    
+    public var body: some ReducerOf<Self> {
+        Scope(state: \.addItem, action: \.addItem) {
+            EmptyReducer()
         }
-        .frame(maxWidth: .infinity, maxHeight: 100)
-        .padding(15)
-        .background(Color.accentColor)
-        .presentationCornerRadius(25)
     }
 }

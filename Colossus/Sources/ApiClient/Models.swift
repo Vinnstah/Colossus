@@ -138,9 +138,26 @@ extension AssetPair {
     ]
 }
 
-public struct Coin {
-    let assetPair: AssetPair
-    let image: Image
+public struct Coin: Identifiable {
+    public let assetPair: AssetPair
+    public let name: String
+    public let id: UUID
+    public let image: Image
+    
+    private init(assetPair: AssetPair, name: String, id: UUID, image: Image) {
+        self.assetPair = assetPair
+        self.name = name
+        self.id = id
+        self.image = image
+    }
+    
+    init(symbol: String, name: String, id: UUID, image: Image) {
+        self.init(
+            assetPair: .init(from: "USDT", to: symbol, limit: 1),
+            name: name,
+            id: id,
+            image: image)
+    }
 }
 
 public struct AnonymousOrderBook: Sendable, Hashable, Codable {
@@ -149,6 +166,10 @@ public struct AnonymousOrderBook: Sendable, Hashable, Codable {
         public let amount: String
         public var description: String {
             "\(amount) @ \(price)"
+        }
+        
+        public var formattedPrice: String {
+            String(Double(price) ?? 0)
         }
     }
     public typealias Bids = [Order]
@@ -165,6 +186,8 @@ public struct AnonymousOrderBook: Sendable, Hashable, Codable {
     public var lowestAsk: Order? {
         asks.first
     }
+    
+    
 }
 
 extension AnonymousOrderBook.Order {
