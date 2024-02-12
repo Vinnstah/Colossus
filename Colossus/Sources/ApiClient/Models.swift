@@ -138,20 +138,21 @@ extension AssetPair {
     ]
 }
 
-public struct Coin: Identifiable {
+public struct Coin: Identifiable, Codable {
     public let assetPair: AssetPair
     public let name: String
     public let id: UUID
-    public let image: Image
+    public let image: String
     
-    private init(assetPair: AssetPair, name: String, id: UUID, image: Image) {
+//
+    private init(assetPair: AssetPair, name: String, id: UUID, image: String) {
         self.assetPair = assetPair
         self.name = name
         self.id = id
         self.image = image
     }
     
-    init(symbol: String, name: String, id: UUID, image: Image) {
+    init(symbol: String, name: String, id: UUID, image: String) {
         self.init(
             assetPair: .init(from: "USDT", to: symbol, limit: 1),
             name: name,

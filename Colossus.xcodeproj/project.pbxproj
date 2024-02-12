@@ -22,6 +22,7 @@
 		E57A07472B69A05600820ED1 /* _SwiftUIDependency in Frameworks */ = {isa = PBXBuildFile; productRef = E57A07462B69A05600820ED1 /* _SwiftUIDependency */; };
 		E599609A2B6EF7B600C0882C /* MainFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59960992B6EF7B600C0882C /* MainFeature.swift */; };
 		E5E882DB2B7A18510021B712 /* MainFeature+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E882DA2B7A18510021B712 /* MainFeature+View.swift */; };
+		E5E882DE2B7A43590021B712 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E882DD2B7A43590021B712 /* DataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		E57A07352B6976F800820ED1 /* AppFeature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		E59960992B6EF7B600C0882C /* MainFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeature.swift; sourceTree = "<group>"; };
 		E5E882DA2B7A18510021B712 /* MainFeature+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainFeature+View.swift"; sourceTree = "<group>"; };
+		E5E882DD2B7A43590021B712 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +96,7 @@
 		E57A072E2B6976F800820ED1 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E5E882DC2B7A434C0021B712 /* DataManager */,
 				E59960982B6EF7AD00C0882C /* MainFeature */,
 				E57A072F2B6976F800820ED1 /* SplashFeature */,
 				E57A07312B6976F800820ED1 /* ApiClient */,
@@ -134,6 +137,14 @@
 				E5E882DA2B7A18510021B712 /* MainFeature+View.swift */,
 			);
 			path = MainFeature;
+			sourceTree = "<group>";
+		};
+		E5E882DC2B7A434C0021B712 /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				E5E882DD2B7A43590021B712 /* DataManager.swift */,
+			);
+			path = DataManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,6 +230,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E57A07392B6976F800820ED1 /* AppFeature.swift in Sources */,
+				E5E882DE2B7A43590021B712 /* DataManager.swift in Sources */,
 				E57A07362B6976F800820ED1 /* SplashFeature.swift in Sources */,
 				E57A07212B6976D000820ED1 /* ColossusApp.swift in Sources */,
 				E57A07372B6976F800820ED1 /* ApiClient.swift in Sources */,
