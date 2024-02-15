@@ -103,7 +103,7 @@ fileprivate extension String {
     static let coins: String = "Coins"
 }
 
-public struct User: Codable {
+public struct User: Codable, Equatable {
     public let id: UUID
     public let name: String
     

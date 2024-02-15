@@ -9,9 +9,9 @@ public struct MainFeature {
     @ObservableState
     public struct State: Equatable {
         @Presents var alert: AlertState<MainFeature.Action.Alert>?
-        var path = StackState<Path.State>()
-        var orderBooks: [OrderBook] = []
-        var symbols: [AssetPair] = AssetPair.listOfAssetPairs
+        public var path = StackState<Path.State>()
+        public var orderBooks: [OrderBook] = []
+        public var symbols: [AssetPair] = AssetPair.listOfAssetPairs
     }
     
     public enum Action: ViewAction {
@@ -31,7 +31,7 @@ public struct MainFeature {
         }
     }
     
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
                 
@@ -74,7 +74,7 @@ public struct MainFeature {
                     await send(.view(.onAppear)) }
                 
             case .view(.addCoin):
-                state.path.append(.addItem)
+                state.path.append(.addItem(.init()))
                 return .none
                 
             case .alert, .path:
@@ -82,26 +82,14 @@ public struct MainFeature {
                     
             }
         }
-        .forEach(\.path, action: \.path) {
-          Path()
-        }
+        .forEach(\.path, action: \.path)
     }
 }
 
-@Reducer
-public struct Path {
-    @ObservableState
-    public enum State {
-        case addItem
-    }
-    
-    public enum Action {
-        case addItem
-    }
-    
-    public var body: some ReducerOf<Self> {
-        Scope(state: \.addItem, action: \.addItem) {
-            EmptyReducer()
-        }
-    }
+@Reducer(state: .equatable)
+public enum Path {
+    case addItem(AddItem)
 }
+
+@Reducer
+public struct AddItem {}

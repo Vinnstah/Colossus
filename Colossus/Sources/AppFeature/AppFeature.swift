@@ -50,7 +50,7 @@ extension AppFeature {
             switch store.state {
             case .splash:
                 if let store = store.scope(state: \.splash, action: \.splash) {
-                    SplashFeature.View(store: store)
+                    SplashFeature.SplashView(store: store)
                 }
             case .main:
                 if let store = store.scope(state: \.main, action: \.main) {

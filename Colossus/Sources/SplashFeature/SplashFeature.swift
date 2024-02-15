@@ -1,18 +1,13 @@
 import Foundation
 import SwiftUI
 import ComposableArchitecture
-import SwiftData
 
 @Reducer
 public struct SplashFeature {
     @Dependency(\.continuousClock) var clock
     @Dependency(\.userDefaults) var userDefaults
-}
-
-extension SplashFeature {
-    @ObservableState
-    public struct State {
-    }
+    
+    public struct State {}
     
     public enum Action: ViewAction {
         case delegate(DelegateAction)
@@ -26,11 +21,8 @@ extension SplashFeature {
             case isLoggedIn(Bool)
         }
     }
-}
-
-
-extension SplashFeature {
-    public var body: some Reducer<State, Action> {
+    
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
                 
@@ -49,11 +41,10 @@ extension SplashFeature {
 }
 
 extension SplashFeature {
-    
-    @ViewAction(for: SplashFeature.self)
-    struct View: SwiftUI.View {
-        let store: StoreOf<SplashFeature>
-        var body: some SwiftUI.View {
+        @ViewAction(for: SplashFeature.self)
+    public struct SplashView: View {
+        public let store: StoreOf<SplashFeature>
+        public var body: some View {
             Text("Loading Colossus...")
                 .onAppear {
                     send(.onAppear)

@@ -23,6 +23,19 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E561274E2B7A57CF004167E4"
+               BuildableName = "ColossusTests.xctest"
+               BlueprintName = "ColossusTests"
+               ReferencedContainer = "container:Colossus.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -54,9 +67,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E57A071C2B6976D000820ED1"
-            BuildableName = "Colossus.app"
-            BlueprintName = "Colossus"
+            BlueprintIdentifier = "E561274E2B7A57CF004167E4"
+            BuildableName = "ColossusTests.xctest"
+            BlueprintName = "ColossusTests"
             ReferencedContainer = "container:Colossus.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

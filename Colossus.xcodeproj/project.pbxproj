@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E56127582B7A57DA004167E4 /* DataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56127492B7A54DD004167E4 /* DataManagerTests.swift */; };
 		E57A07212B6976D000820ED1 /* ColossusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57A07202B6976D000820ED1 /* ColossusApp.swift */; };
 		E57A07252B6976D200820ED1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E57A07242B6976D200820ED1 /* Assets.xcassets */; };
 		E57A07282B6976D200820ED1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E57A07272B6976D200820ED1 /* Preview Assets.xcassets */; };
@@ -25,9 +26,21 @@
 		E5E882DE2B7A43590021B712 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E882DD2B7A43590021B712 /* DataManager.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		E56127532B7A57D0004167E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E57A07152B6976D000820ED1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E57A071C2B6976D000820ED1;
+			remoteInfo = Colossus;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		E5021B6A2B7E43E3006738AB /* ColossusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = ColossusTests.xctest; path = "/Users/viktorjansson/Developer/Swift/Colossus/build/Debug-iphoneos/ColossusTests.xctest"; sourceTree = "<absolute>"; };
 		E52E6E402B75626400B07495 /* Journal.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Journal.md; sourceTree = "<group>"; };
-		E57A071D2B6976D000820ED1 /* Colossus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Colossus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E53EAEDD2B7CEC5F0076C4E5 /* Colossus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Colossus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E56127492B7A54DD004167E4 /* DataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerTests.swift; sourceTree = "<group>"; };
 		E57A07202B6976D000820ED1 /* ColossusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColossusApp.swift; sourceTree = "<group>"; };
 		E57A07242B6976D200820ED1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E57A07272B6976D200820ED1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -41,6 +54,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E561274C2B7A57CF004167E4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E57A071A2B6976D000820ED1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -57,26 +77,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E56127502B7A57D0004167E4 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E56127492B7A54DD004167E4 /* DataManagerTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		E57A07142B6976D000820ED1 = {
 			isa = PBXGroup;
 			children = (
 				E57A071F2B6976D000820ED1 /* Colossus */,
-				E57A071E2B6976D000820ED1 /* Products */,
+				E53EAEDD2B7CEC5F0076C4E5 /* Colossus.app */,
 			);
-			sourceTree = "<group>";
-		};
-		E57A071E2B6976D000820ED1 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E57A071D2B6976D000820ED1 /* Colossus.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		E57A071F2B6976D000820ED1 /* Colossus */ = {
 			isa = PBXGroup;
 			children = (
 				E57A07202B6976D000820ED1 /* ColossusApp.swift */,
+				E56127502B7A57D0004167E4 /* Tests */,
 				E57A072E2B6976F800820ED1 /* Sources */,
 				E57A07242B6976D200820ED1 /* Assets.xcassets */,
 				E57A07262B6976D200820ED1 /* Preview Content */,
@@ -150,6 +171,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		E561274E2B7A57CF004167E4 /* ColossusTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E56127552B7A57D0004167E4 /* Build configuration list for PBXNativeTarget "ColossusTests" */;
+			buildPhases = (
+				E561274B2B7A57CF004167E4 /* Sources */,
+				E561274C2B7A57CF004167E4 /* Frameworks */,
+				E561274D2B7A57CF004167E4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E56127542B7A57D0004167E4 /* PBXTargetDependency */,
+			);
+			name = ColossusTests;
+			packageProductDependencies = (
+			);
+			productName = ColossusTests;
+			productReference = E5021B6A2B7E43E3006738AB /* ColossusTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		E57A071C2B6976D000820ED1 /* Colossus */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E57A072B2B6976D200820ED1 /* Build configuration list for PBXNativeTarget "Colossus" */;
@@ -172,7 +213,7 @@
 				E57A07462B69A05600820ED1 /* _SwiftUIDependency */,
 			);
 			productName = CryptoChecker;
-			productReference = E57A071D2B6976D000820ED1 /* Colossus.app */;
+			productReference = E53EAEDD2B7CEC5F0076C4E5 /* Colossus.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -185,6 +226,10 @@
 				LastSwiftUpdateCheck = 1520;
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
+					E561274E2B7A57CF004167E4 = {
+						CreatedOnToolsVersion = 15.2;
+						TestTargetID = E57A071C2B6976D000820ED1;
+					};
 					E57A071C2B6976D000820ED1 = {
 						CreatedOnToolsVersion = 15.2;
 					};
@@ -203,16 +248,24 @@
 				E57A073A2B69770B00820ED1 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				E57A073D2B69A05600820ED1 /* XCRemoteSwiftPackageReference "swift-dependencies-additions" */,
 			);
-			productRefGroup = E57A071E2B6976D000820ED1 /* Products */;
+			productRefGroup = E57A07142B6976D000820ED1;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				E57A071C2B6976D000820ED1 /* Colossus */,
+				E561274E2B7A57CF004167E4 /* ColossusTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E561274D2B7A57CF004167E4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E57A071B2B6976D000820ED1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -225,6 +278,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E561274B2B7A57CF004167E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E56127582B7A57DA004167E4 /* DataManagerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E57A07192B6976D000820ED1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -242,7 +303,51 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		E56127542B7A57D0004167E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E57A071C2B6976D000820ED1 /* Colossus */;
+			targetProxy = E56127532B7A57D0004167E4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		E56127562B7A57D0004167E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T32P3MN8S6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = VJ.ColossusTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Colossus.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Colossus";
+			};
+			name = Debug;
+		};
+		E56127572B7A57D0004167E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T32P3MN8S6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = VJ.ColossusTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Colossus.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Colossus";
+			};
+			name = Release;
+		};
 		E57A07292B6976D200820ED1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -280,6 +385,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -343,6 +449,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -369,7 +476,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Colossus/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "Colossus/Preview\\ Content";
 				DEVELOPMENT_TEAM = T32P3MN8S6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -399,7 +506,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Colossus/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "Colossus/Preview\\ Content";
 				DEVELOPMENT_TEAM = T32P3MN8S6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -425,6 +532,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E56127552B7A57D0004167E4 /* Build configuration list for PBXNativeTarget "ColossusTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E56127562B7A57D0004167E4 /* Debug */,
+				E56127572B7A57D0004167E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E57A07182B6976D000820ED1 /* Build configuration list for PBXProject "Colossus" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
