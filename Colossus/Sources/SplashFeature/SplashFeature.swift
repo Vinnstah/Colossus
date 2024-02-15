@@ -40,13 +40,17 @@ public struct SplashFeature {
 }
 
 extension SplashFeature {
-        @ViewAction(for: SplashFeature.self)
+    @ViewAction(for: SplashFeature.self)
     public struct SplashView: View {
         public let store: StoreOf<SplashFeature>
         public var body: some View {
             Image("Colossus")
+                .resizable()
+                .scaledToFit()
                 .ignoresSafeArea()
+            
             Text("Loading Colossus...")
+            
                 .onAppear {
                     send(.onAppear)
                 }
