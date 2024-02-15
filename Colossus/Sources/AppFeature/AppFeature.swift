@@ -31,7 +31,7 @@ struct AppFeature {
             switch action {
                 
             case let .splash(.delegate(.isLoggedIn(isLoggedIn))):
-                precondition(!isLoggedIn, "Onboarding not yet implemented")
+                precondition(isLoggedIn == nil, "Onboarding not yet implemented")
                 state = .main(MainFeature.State())
                 return .none
                 

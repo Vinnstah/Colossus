@@ -5,7 +5,7 @@ import ComposableArchitecture
 @Reducer
 public struct SplashFeature {
     @Dependency(\.continuousClock) var clock
-    @Dependency(\.userDefaults) var userDefaults
+    @Dependency(\.dataManager) var dataManager
     
     public struct State {}
     
@@ -18,7 +18,7 @@ public struct SplashFeature {
         }
         
         public enum DelegateAction: Equatable {
-            case isLoggedIn(Bool)
+            case isLoggedIn(User?)
         }
     }
     
@@ -28,9 +28,8 @@ public struct SplashFeature {
                 
             case .view(.onAppear):
                     .run { send in
-                        try await clock.sleep(for: .milliseconds(800))
-                        let isLoggedIn = userDefaults.bool(forKey: .userOnboarded) ?? false
-                        await send(.delegate(.isLoggedIn(isLoggedIn)))
+                        try await clock.sleep(for: .milliseconds(1600))
+                        await send(.delegate(.isLoggedIn(try dataManager.fetchUser())))
                     }
                 
             case .delegate:
@@ -45,6 +44,8 @@ extension SplashFeature {
     public struct SplashView: View {
         public let store: StoreOf<SplashFeature>
         public var body: some View {
+            Image("Colossus")
+                .ignoresSafeArea()
             Text("Loading Colossus...")
                 .onAppear {
                     send(.onAppear)
