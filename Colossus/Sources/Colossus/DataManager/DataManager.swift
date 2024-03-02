@@ -12,7 +12,7 @@ public struct DataManager: DependencyKey {
     public var fetchUser: FetchUser
     public var addUser: AddUser
     public var fetchCoins: FetchCoins
-    public var inserCoin: InsertCoin
+    public var insertCoin: InsertCoin
     public var deleteCoin: DeleteCoin
     
     public init(
@@ -25,7 +25,7 @@ public struct DataManager: DependencyKey {
         self.fetchUser = fetchUser
         self.addUser = addUser
         self.fetchCoins = fetchCoins
-        self.inserCoin = inserCoin
+        self.insertCoin = inserCoin
         self.deleteCoin = deleteCoin
     }
 }

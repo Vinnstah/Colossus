@@ -35,7 +35,7 @@ extension MainFeature {
                 switch store.state {
                 case .addItem:
                     if let store = store.scope(state: \.addItem, action: \.addItem) {
-                        AddItem.View(store: store)
+                        AddCoin.View(store: store)
                     }
                 case .coin:
                     if let store = store.scope(state: \.coin, action: \.coin) {
