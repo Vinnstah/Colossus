@@ -24,19 +24,8 @@ extension MainFeature {
                         }
                     }
                 }
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Add Coin") {
-                            send(.addCoin)
-                        }
-                    }
-                }
             } destination: { store in
                 switch store.state {
-                case .addItem:
-                    if let store = store.scope(state: \.addItem, action: \.addItem) {
-                        AddCoin.View(store: store)
-                    }
                 case .coin:
                     if let store = store.scope(state: \.coin, action: \.coin) {
                         CoinFeature.View(store: store)

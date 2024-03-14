@@ -19,13 +19,13 @@ public struct DataManager: DependencyKey {
         fetchUser: @escaping FetchUser,
         addUser: @escaping AddUser,
         fetchCoins: @escaping FetchCoins,
-        inserCoin: @escaping InsertCoin,
+        insertCoin: @escaping InsertCoin,
         deleteCoin: @escaping DeleteCoin
     ) {
         self.fetchUser = fetchUser
         self.addUser = addUser
         self.fetchCoins = fetchCoins
-        self.insertCoin = inserCoin
+        self.insertCoin = insertCoin
         self.deleteCoin = deleteCoin
     }
 }
@@ -57,7 +57,7 @@ public extension DataManager {
                 return try decode(IdentifiedArrayOf<Coin>.self, from: data)
                 
             },
-            inserCoin: { coin in
+            insertCoin: { coin in
                 guard let data = userDefaults.data(forKey: .coins) else {
                     return nil
                 }
@@ -92,7 +92,7 @@ extension DataManager {
         fetchUser: unimplemented("\(Self.self).fetchUser"),
         addUser: unimplemented("\(Self.self).addUser"),
         fetchCoins: unimplemented("\(Self.self).fetchCoins"),
-        inserCoin: unimplemented("\(Self.self).inserCoin"),
+        insertCoin: unimplemented("\(Self.self).insertCoin"),
         deleteCoin: unimplemented("\(Self.self).deleteCoin")
     )
         
@@ -101,6 +101,7 @@ extension DataManager {
 fileprivate extension String {
     static let user: String = "User"
     static let coins: String = "Coins"
+    static let wallet: String = "Wallet"
 }
 
 public struct User: Codable, Equatable {

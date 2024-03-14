@@ -9,6 +9,11 @@ public struct MainFeature {
     @Dependency(\.apiClient) var apiClient
     @Dependency(\.uuid) var uuid
     
+    @Reducer(state: .equatable)
+    public enum Path {
+        case coin(CoinFeature)
+    }
+
     @ObservableState
     public struct State: Equatable {
         @Presents var alert: AlertState<MainFeature.Action.Alert>?
@@ -31,7 +36,6 @@ public struct MainFeature {
         
         public enum View {
             case onAppear
-            case addCoin
             case inspectCoin(OrderBook)
         }
     }
@@ -82,10 +86,6 @@ public struct MainFeature {
                 return .run { send in
                     await send(.view(.onAppear)) }
                 
-            case .view(.addCoin):
-                state.path.append(.addItem(.init(coin: .init(id: uuid()))))
-                return .none
-                
             case .alert, .path:
                 return .none
                     
@@ -98,9 +98,4 @@ public struct MainFeature {
     }
 }
 
-@Reducer(state: .equatable)
-public enum Path {
-    case addItem(AddCoin)
-    case coin(CoinFeature)
-}
 
