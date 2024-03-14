@@ -106,10 +106,21 @@ fileprivate extension String {
 
 public struct User: Codable, Equatable {
     public let id: UUID
-    public let name: String
+    public var firstName: String
+    public var lastName: String
+    public var topics: Topics
     
-    public init(id: UUID, name: String) {
+    public init(id: UUID, firstName: String, lastName: String, topics: Topics) {
         self.id = id
-        self.name = name
+        self.firstName = firstName
+        self.lastName = lastName
+        self.topics = topics
+    }
+    
+    public enum Topics: Codable {
+        case crypto
+        case stocks
+        case rawmaterials
+        case interests
     }
 }

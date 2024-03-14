@@ -13,6 +13,7 @@ struct Colossus: App {
                         ._printChanges()
                 }
             )
+            .buttonStyle(.borderedProminent)
         }
     }
 }
