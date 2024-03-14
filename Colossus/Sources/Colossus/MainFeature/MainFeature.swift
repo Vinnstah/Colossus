@@ -7,7 +7,13 @@ import CryptoServiceUniFFI
 @Reducer
 public struct MainFeature {
     @Dependency(\.apiClient) var apiClient
+    @Dependency(\.uuid) var uuid
     
+    @Reducer(state: .equatable)
+    public enum Path {
+        case coin(CoinFeature)
+    }
+
     @ObservableState
     public struct State: Equatable {
         @Presents var alert: AlertState<MainFeature.Action.Alert>?
@@ -30,7 +36,6 @@ public struct MainFeature {
         
         public enum View {
             case onAppear
-            case addCoin
             case inspectCoin(OrderBook)
         }
     }
@@ -41,13 +46,17 @@ public struct MainFeature {
                 
             case .view(.onAppear):
                 return .run { [symbols = state.symbols] send in
-                    for assetPair in symbols {
-                        let result = await Result {
-                            try await apiClient.getOrderbook(
-                                assetPair
-                            )
+                     await withThrowingTaskGroup(of: Void.self) { group in
+                        for assetPair in symbols {
+                            group.addTask {
+                                let result = await Result {
+                                    try await apiClient.getOrderbook(
+                                        assetPair
+                                    )
+                                }
+                                await send(.orderbookResult(result, assetPair))
+                            }
                         }
-                        await send(.orderbookResult(result, assetPair))
                     }
                 }
                 
@@ -77,10 +86,6 @@ public struct MainFeature {
                 return .run { send in
                     await send(.view(.onAppear)) }
                 
-            case .view(.addCoin):
-                state.path.append(.addItem(.init()))
-                return .none
-                
             case .alert, .path:
                 return .none
                     
@@ -93,9 +98,4 @@ public struct MainFeature {
     }
 }
 
-@Reducer(state: .equatable)
-public enum Path {
-    case addItem(AddItem)
-    case coin(CoinFeature)
-}
 

@@ -81,6 +81,7 @@ extension Symbol: QueryItemsExpressible {
 }
 
 public struct AssetPair: Sendable, Hashable, QueryItemsExpressible, Codable {
+    
     public let symbol: Symbol
     public var limit: Int?
     
@@ -138,28 +139,7 @@ extension AssetPair {
     ]
 }
 
-public struct Coin: Identifiable, Codable, Equatable {
-    public let assetPair: AssetPair
-    public let name: String
-    public let id: UUID
-    public let image: String
-    
-//
-    private init(assetPair: AssetPair, name: String, id: UUID, image: String) {
-        self.assetPair = assetPair
-        self.name = name
-        self.id = id
-        self.image = image
-    }
-    
-    init(symbol: String, name: String, id: UUID, image: String) {
-        self.init(
-            assetPair: .init(from: "USDT", to: symbol, limit: 1),
-            name: name,
-            id: id,
-            image: image)
-    }
-}
+
 
 public struct AnonymousOrderBook: Sendable, Hashable, Codable {
     public struct Order: Sendable, Hashable, Codable, CustomStringConvertible {
