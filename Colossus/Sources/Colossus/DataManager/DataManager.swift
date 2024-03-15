@@ -108,9 +108,9 @@ public struct User: Codable, Equatable {
     public let id: UUID
     public var firstName: String
     public var lastName: String
-    public var topics: Topics
+    public var topics: [Topics]
     
-    public init(id: UUID, firstName: String, lastName: String, topics: Topics) {
+    public init(id: UUID, firstName: String, lastName: String, topics: [Topics]) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName

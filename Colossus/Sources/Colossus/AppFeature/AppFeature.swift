@@ -11,6 +11,7 @@ public struct AppFeature {
     public enum State {
         case splash(SplashFeature.State)
         case main(MainFeature.State)
+        case onboarding(OnboardingCoordinator.State)
         
         public init() {
             self = .splash(SplashFeature.State())
@@ -20,6 +21,7 @@ public struct AppFeature {
     public enum Action {
         case splash(SplashFeature.Action)
         case main(MainFeature.Action)
+        case onboarding(OnboardingCoordinator.Action)
     }
     
     public var body: some Reducer<State, Action> {
@@ -29,16 +31,22 @@ public struct AppFeature {
         Scope(state: \.main , action: \.main) {
             MainFeature()
         }
+        Scope(state: \.onboarding , action: \.onboarding) {
+            OnboardingCoordinator()
+        }
         
         Reduce { state, action in
             switch action {
                 
-            case let .splash(.delegate(.isLoggedIn(isLoggedIn))):
-                precondition(isLoggedIn == nil, "Onboarding not yet implemented")
-                state = .main(MainFeature.State())
+            case let .splash(.delegate(.isLoggedIn(maybeUser))):
+                guard let existingUser = maybeUser else {
+                    state = .onboarding(.init(user: Shared(User(id: .init(), firstName: "", lastName: "", topics: []))))
+                    return .none
+                }
+                    state = .main(MainFeature.State())
                 return .none
                 
-            case .splash, .main:
+            case .splash, .main, .onboarding:
                 return .none
             }
         }
@@ -62,6 +70,10 @@ extension AppFeature {
             case .main:
                 if let store = store.scope(state: \.main, action: \.main) {
                     MainFeature.View(store: store)
+                }
+            case .onboarding:
+                if let store = store.scope(state: \.onboarding, action: \.onboarding) {
+                OnboardingCoordinator.Screen(store: store)
                 }
             }
         }
