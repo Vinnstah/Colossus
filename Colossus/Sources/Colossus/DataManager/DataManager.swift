@@ -1,6 +1,7 @@
 import Foundation
 import Dependencies
 import IdentifiedCollections
+import SwiftUI
 
 public struct DataManager: DependencyKey {
     public typealias FetchUser = () throws -> User?
@@ -108,19 +109,20 @@ public struct User: Codable, Equatable {
     public let id: UUID
     public var firstName: String
     public var lastName: String
-    public var topics: [Topics]
+    public var topics: Set<Topic>
     
-    public init(id: UUID, firstName: String, lastName: String, topics: [Topics]) {
+    public init(id: UUID, firstName: String, lastName: String, topics: Set<Topic>) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
         self.topics = topics
     }
     
-    public enum Topics: Codable {
-        case crypto
-        case stocks
-        case rawmaterials
-        case interests
+    public enum Topic: String, Identifiable, CaseIterable, Codable {
+        case crypto = "Crypto"
+        case stocks = "Stocks"
+        case currency = "Currency"
+        case intrestRates = "Intrest Rates"
+        public var id: Self { self }
     }
 }

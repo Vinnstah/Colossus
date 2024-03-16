@@ -9,6 +9,7 @@ public struct OnboardingCoordinator {
         case personalInformation(PersonalInformation)
         case wallet(Wallet)
         case customizeHome(CustomizeHome)
+        case summary(Summary)
     }
     
     @ObservableState
@@ -26,10 +27,13 @@ public struct OnboardingCoordinator {
         Reduce { state, action in
             switch action {
             case .path(.element(id: _, action: .personalInformation(.delegate(.next)))):
-                state.path.append(.wallet(.init()))
+                state.path.append(.customizeHome(.init(user: state.$user)))
                 return .none
             case .beginOnboardingTapped:
                 state.path.append(.personalInformation(.init(user: state.$user)))
+                return .none
+            case .path(.element(id: _, action:  .customizeHome(.delegate(.next)))):
+                state.path.append(.summary(.init(user: state.$user)))
                 return .none
             case .path:
                 return .none
@@ -54,7 +58,9 @@ public struct OnboardingCoordinator {
                 case let .wallet(store):
                     EmptyView()
                 case let .customizeHome(store):
-                    EmptyView()
+                    CustomizeHome.Screen(store: store)
+                case let .summary(store):
+                    Summary.Screen(store: store)
                 }
             }
             .tint(.indigo)
@@ -62,60 +68,8 @@ public struct OnboardingCoordinator {
     }
 }
     
-    @Reducer
-    public struct PersonalInformation {
-        @ObservableState
-        public struct State {
-            @Shared var user: User
-            var createNewWallet: Bool = false
-        }
-        
-        public enum Action: BindableAction {
-            case binding(BindingAction<State>)
-            case nextButtonTapped
-            case delegate(Delegate)
-            
-            public enum Delegate {
-                case next
-            }
-        }
-        
-        public var body: some ReducerOf<Self> {
-            BindingReducer()
-            Reduce { state, action in
-                switch action {
-                case .nextButtonTapped:
-                    return .send(.delegate(.next))
-                case .binding, .delegate:
-                    return .none
-                }
-            }
-        }
-        
-        struct Screen: View {
-            @Bindable var store: StoreOf<PersonalInformation>
-            
-            var body: some View {
-                Form {
-                    Section {
-                        TextField("First Name", text: $store.user.firstName)
-                        TextField("Last Name", text: $store.user.lastName)
-                    }
-                    Section {
-                        Toggle(isOn: $store.createNewWallet) {
-                            Text("Create new Wallet?")
-                        }
-                        Button("Next") {
-                            store.send(.nextButtonTapped)
-                        }
-                    }
-                }
-            }
-        }
-    }
+ 
     
     @Reducer
     public struct Wallet {}
     
-    @Reducer
-    public struct CustomizeHome {}
