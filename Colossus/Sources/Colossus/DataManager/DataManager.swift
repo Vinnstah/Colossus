@@ -120,9 +120,9 @@ public struct User: Codable, Equatable {
     
     public enum Topic: String, Identifiable, CaseIterable, Codable {
         case crypto = "Crypto"
-        case stocks = "Stocks"
         case currency = "Currency"
-        case intrestRates = "Intrest Rates"
+        case interestRates = "Interest Rates"
+        case stocks = "Stocks"
         public var id: Self { self }
     }
 }

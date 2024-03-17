@@ -43,8 +43,10 @@ public struct Summary {
                     Text("Personal Information")
                 }
                 Section {
+                    ForEach(store.user.topics.sorted(by: { $0.rawValue < $1.rawValue})) { topic in
+                        Text(topic.rawValue)
+                    }
 //                    ForEach(store.user.topics.sorted(by: $0.rawValue < $1.rawValue)) { topic in
-//                        Text(topic.rawValue)
 //                    }
                 } header: {
                     Text("Topics")
@@ -55,6 +57,7 @@ public struct Summary {
                     }
                 }
             }
+            .setFormBackground()
             .navigationTitle("Summary")
         }
     }

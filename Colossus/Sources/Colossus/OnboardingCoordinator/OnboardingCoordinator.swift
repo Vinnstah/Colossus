@@ -12,6 +12,8 @@ public struct OnboardingCoordinator {
         case summary(Summary)
     }
     
+    @Dependency(\.dataManager) var dataManager
+    
     @ObservableState
     public struct State {
         var path = StackState<Path.State>()
@@ -21,6 +23,11 @@ public struct OnboardingCoordinator {
     public enum Action {
         case path(StackAction<Path.State, Path.Action>)
         case beginOnboardingTapped
+        case delegate(Delegate)
+        
+        public enum Delegate {
+            case finishedOnboarding(User)
+        }
     }
     
     public var body: some ReducerOf<Self> {
@@ -35,7 +42,15 @@ public struct OnboardingCoordinator {
             case .path(.element(id: _, action:  .customizeHome(.delegate(.next)))):
                 state.path.append(.summary(.init(user: state.$user)))
                 return .none
-            case .path:
+                
+            case .path(.element(id: _, action:  .summary(.delegate(.finishedOnboarding)))):
+                return .run { [user = state.user] send in
+                    try dataManager.addUser(user)
+                    
+                    await send(.delegate(.finishedOnboarding(user)))
+                }
+                
+            case .path, .delegate:
                 return .none
                 
             }
@@ -47,29 +62,31 @@ public struct OnboardingCoordinator {
         @Bindable var store: StoreOf<OnboardingCoordinator>
         
         var body: some View {
-            NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-                Button("Begin Onboarding") {
-                    store.send(.beginOnboardingTapped)
-                }
-            } destination: { store in
-                switch store.case {
-                case let .personalInformation(store):
-                    PersonalInformation.Screen(store: store)
-                case let .wallet(store):
-                    EmptyView()
-                case let .customizeHome(store):
-                    CustomizeHome.Screen(store: store)
-                case let .summary(store):
-                    Summary.Screen(store: store)
-                }
+                    NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+                        Button("Begin Onboarding") {
+                            store.send(.beginOnboardingTapped)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color("Background").ignoresSafeArea())
+                    } destination: { store in
+                            switch store.case {
+                            case let .personalInformation(store):
+                                PersonalInformation.Screen(store: store)
+                            case let .wallet(store):
+                                EmptyView()
+                            case let .customizeHome(store):
+                                CustomizeHome.Screen(store: store)
+                            case let .summary(store):
+                                Summary.Screen(store: store)
+                            }
             }
             .tint(.indigo)
         }
     }
 }
-    
- 
-    
-    @Reducer
-    public struct Wallet {}
-    
+
+
+
+@Reducer
+public struct Wallet {}
+

@@ -43,7 +43,11 @@ public struct AppFeature {
                     state = .onboarding(.init(user: Shared(User(id: .init(), firstName: "", lastName: "", topics: []))))
                     return .none
                 }
-                    state = .main(MainFeature.State())
+                state = .main(MainFeature.State(user: existingUser))
+                return .none
+                
+            case let .onboarding(.delegate(.finishedOnboarding(user))):
+                state = .main(MainFeature.State(user: user))
                 return .none
                 
             case .splash, .main, .onboarding:
@@ -62,18 +66,23 @@ extension AppFeature {
         }
         
         public var body: some SwiftUI.View {
-            switch store.state {
-            case .splash:
-                if let store = store.scope(state: \.splash, action: \.splash) {
-                    SplashFeature.SplashView(store: store)
-                }
-            case .main:
-                if let store = store.scope(state: \.main, action: \.main) {
-                    MainFeature.View(store: store)
-                }
-            case .onboarding:
-                if let store = store.scope(state: \.onboarding, action: \.onboarding) {
-                OnboardingCoordinator.Screen(store: store)
+            ZStack {
+                Color("Background").ignoresSafeArea()
+                VStack {
+                    switch store.state {
+                    case .splash:
+                        if let store = store.scope(state: \.splash, action: \.splash) {
+                            SplashFeature.SplashView(store: store)
+                        }
+                    case .main:
+                        if let store = store.scope(state: \.main, action: \.main) {
+                            MainFeature.View(store: store)
+                        }
+                    case .onboarding:
+                        if let store = store.scope(state: \.onboarding, action: \.onboarding) {
+                            OnboardingCoordinator.Screen(store: store)
+                        }
+                    }
                 }
             }
         }

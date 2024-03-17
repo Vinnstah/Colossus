@@ -39,7 +39,6 @@ public struct CustomizeHome {
                 Section {
                     VStack {
                         Text("Customize HomeScreen")
-                        Text("Select topics")
                     }
                 }
                 Section {
@@ -49,6 +48,9 @@ public struct CustomizeHome {
                                 
                             }
                     }
+                } header: {
+                    Text("Select topics")
+                        .foregroundStyle(Color.indigo.opacity(50))
                 }
                 Section {
                     Button("Next") {
@@ -56,6 +58,7 @@ public struct CustomizeHome {
                     }
                 }
             }
+            .setFormBackground()
             .navigationTitle("Topics")
         }
     }
