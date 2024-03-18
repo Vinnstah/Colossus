@@ -20,6 +20,7 @@ public struct MainFeature {
         public var path = StackState<Path.State>()
         public var orderBooks: [OrderBook] = []
         public var symbols: [AssetPair] = AssetPair.listOfAssetPairs
+        let user: User
     }
     
     public enum Action: ViewAction {
