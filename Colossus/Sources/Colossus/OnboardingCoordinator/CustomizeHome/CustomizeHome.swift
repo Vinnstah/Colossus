@@ -7,6 +7,7 @@ public struct CustomizeHome {
     @ObservableState
     public struct State {
         @Shared var user: User
+        var isDisabled: Bool = true
     }
     
     public enum Action: BindableAction {
@@ -24,7 +25,15 @@ public struct CustomizeHome {
         Reduce { state, action in
             switch action {
             case .nextButtonTapped:
-                return .send(.delegate(.next))
+                state.isDisabled = false
+                return .run { send in
+                    try await Task.sleep(for: .milliseconds(350))
+                    await send(.delegate(.next))
+                }
+            case .delegate(.next):
+                state.isDisabled = true
+                return .none
+                
             case .binding, .delegate:
                 return .none
             }
@@ -35,28 +44,36 @@ public struct CustomizeHome {
         @Bindable var store: StoreOf<CustomizeHome>
         
         var body: some View {
-            Form {
-                Section {
-                    VStack {
-                        Text("Customize HomeScreen")
-                    }
-                }
-                Section {
-                    ForEach(User.Topic.allCases) { topic in
+            VStack {
+                Form {
+                    Section {
+                        ForEach(User.Topic.allCases) { topic in
                             Toggle(isOn: $store.user.topics.isOn(topic)) {
                                 Text(topic.rawValue)
-                                
+                                    .foregroundStyle(Color("AccentColor"))
                             }
+                        }
+                    } header: {
+                        Text("Select topics")
+                            .foregroundStyle(Color.white.opacity(50))
                     }
-                } header: {
-                    Text("Select topics")
-                        .foregroundStyle(Color.indigo.opacity(50))
+                    .listRowBackground(Color("Background").opacity(10))
                 }
-                Section {
-                    Button("Next") {
-                        store.send(.nextButtonTapped)
-                    }
-                }
+             
+                
+                Button(
+                    action: { store.send(.nextButtonTapped) },
+                    label: {
+                        HStack {
+                            Text("Next")
+                            Image(systemName: "arrow.right")
+                                .offset(x: store.isDisabled ? 0 : 140)
+                                .animation(.smooth, value: store.isDisabled)
+                        }
+                        .frame(maxWidth: .infinity)
+                    })
+                .padding(25)
+                .buttonStyle(.borderedProminent)
             }
             .setFormBackground()
             .navigationTitle("Topics")

@@ -28,9 +28,12 @@ public struct PersonalInformation {
             case .nextButtonTapped:
                 state.isDisabled = false
                 return .run { send in
-                    try await Task.sleep(for: .milliseconds(400))
+                    try await Task.sleep(for: .milliseconds(350))
                     await send(.delegate(.next))
                 }
+            case .delegate(.next):
+                state.isDisabled = true
+                return .none
             case .binding, .delegate:
                 return .none
             }
@@ -93,6 +96,7 @@ public struct PersonalInformation {
         }
     }
 }
+
 
 #Preview {
     PersonalInformation.Screen(store:
