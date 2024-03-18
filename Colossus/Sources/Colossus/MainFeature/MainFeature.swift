@@ -68,18 +68,19 @@ public struct MainFeature {
                 return .none
                 
             case let .orderbookResult(.failure(error), assetPair):
-                state.alert = AlertState {
-                    TextState("Alert!")
-                } actions: {
-                    ButtonState(action: .send(.retry)) {
-                        TextState("Try Again")
-                    }
-                    ButtonState(role: .cancel) {
-                        TextState("Cancel")
-                    }
-                } message: {
-                    TextState(error.localizedDescription)
-                }
+                state.orderBooks = OrderBook.mock
+//                state.alert = AlertState {
+//                    TextState("Alert!")
+//                } actions: {
+//                    ButtonState(action: .send(.retry)) {
+//                        TextState("Try Again")
+//                    }
+//                    ButtonState(role: .cancel) {
+//                        TextState("Cancel")
+//                    }
+//                } message: {
+//                    TextState(error.localizedDescription)
+//                }
                 return .none
                 
             case .alert(.presented(.retry)):

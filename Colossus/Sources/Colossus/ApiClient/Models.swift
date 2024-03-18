@@ -200,3 +200,17 @@ extension OrderBook: QueryItemsExpressible {
     }
 }
 
+extension OrderBook {
+    public static let mock: [Self] = [Self.init(
+        pair: .init(from: "BTC", to: "USDT", limit: 1),
+        fetchedOrderBook: .init(lastUpdateId: 11, bids: [.init(price: "67000", amount: "1")], asks: [.init(price: "67001", amount: "2")])),
+                                      Self.init(
+                                        pair: .init(from: "ETH", to: "USDT", limit: 1),
+                                        fetchedOrderBook: .init(lastUpdateId: 11, bids: [.init(price: "1234", amount: "1")], asks: [.init(price: "1233", amount: "2")])),
+                                      Self.init(
+                                        pair: .init(from: "SOL", to: "USDT", limit: 1),
+                                        fetchedOrderBook: .init(lastUpdateId: 11, bids: [.init(price: "255", amount: "1")], asks: [.init(price: "256", amount: "2")])),
+                                      
+    ]
+}
+
