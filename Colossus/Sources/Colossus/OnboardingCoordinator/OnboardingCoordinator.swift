@@ -46,7 +46,6 @@ public struct OnboardingCoordinator {
             case .path(.element(id: _, action:  .summary(.delegate(.finishedOnboarding)))):
                 return .run { [user = state.user] send in
                     try dataManager.addUser(user)
-                    
                     await send(.delegate(.finishedOnboarding(user)))
                 }
                 
@@ -63,8 +62,13 @@ public struct OnboardingCoordinator {
         
         var body: some View {
                     NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-                        Button("Begin Onboarding") {
-                            store.send(.beginOnboardingTapped)
+                        VStack {
+                            Image(systemName: "bitcoinsign.circle")
+                                .frame(width: 400, height: 400, alignment: .center)
+                                .tint(Color.indigo)
+                            Button("Begin Onboarding") {
+                                store.send(.beginOnboardingTapped)
+                            }
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(Color("Background").ignoresSafeArea())
