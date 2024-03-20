@@ -21,6 +21,7 @@ public struct MainFeature {
         public var orderBooks: [OrderBook] = []
         public var symbols: [AssetPair] = AssetPair.listOfAssetPairs
         let user: User
+        var selectedTopic: User.Topic = .crypto
     }
     
     public enum Action: ViewAction {

@@ -210,6 +210,9 @@ extension OrderBook {
                                       Self.init(
                                         pair: .init(from: "SOL", to: "USDT", limit: 1),
                                         fetchedOrderBook: .init(lastUpdateId: 11, bids: [.init(price: "255", amount: "1")], asks: [.init(price: "256", amount: "2")])),
+                                      Self.init(
+                                        pair: .init(from: "ADA", to: "USDT", limit: 1),
+                                        fetchedOrderBook: .init(lastUpdateId: 11, bids: [.init(price: "26.23", amount: "2")], asks: [.init(price: "26.25", amount: "11")])),
                                       
     ]
 }

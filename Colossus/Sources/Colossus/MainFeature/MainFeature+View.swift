@@ -8,30 +8,59 @@ extension MainFeature {
     public struct View: SwiftUI.View {
         @Bindable public var store: StoreOf<MainFeature>
         public var body: some SwiftUI.View {
+            GeometryReader { geo in
             NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-                
                 ZStack {
                     Color("Background").ignoresSafeArea()
                     VStack {
-                        Section {
-                            Header()
-                            ScrollView {
-                                ForEach(store.orderBooks, id: \.self) { orderBook in
-                                    SymbolItem(orderBook: orderBook)
-                                        .onTapGesture {
-                                            send(.inspectCoin(orderBook))
-                                        }
+                        VStack {
+                            Section {
+                                Header()
+                                ScrollView {
+                                    ForEach(store.orderBooks, id: \.self) { orderBook in
+                                        SymbolItem(orderBook: orderBook)
+                                            .onTapGesture {
+                                                send(.inspectCoin(orderBook))
+                                            }
+                                    }
+                                }
+                            } header: {
+                                HStack {
+                                    //                                Picker("Choose a topic", selection: $store.selectedTopic.rawValue) {
+                                    //                                    ForEach(store.user.topics, id: \.self) {
+                                    //                                        Text($0.rawValue)
+                                    //                                            .foregroundStyle(Color.white)
+                                    //                                                }
+                                    //                                            }
+                                    //                                .pickerStyle(.menu)
+                                    
+                                    Text("Crypto")
+                                        .foregroundStyle(Color.white)
+                                        .padding(.leading, 10)
+                                    Spacer()
+                                    Button("See all") {
+                                        // Action to expand sellection
+                                        fatalError()
+                                    }
+                                    .buttonStyle(BorderlessButtonStyle())
+                                    .font(.caption)
                                 }
                             }
-                        } header: {
-                            Text("Crypto")
-                                .foregroundStyle(Color.white)
                         }
+                        .frame(height: geo.size.height / 3)
+                        .padding(.bottom, 25)
+                        .padding(.horizontal, 10)
+                        
+                        MyAssets()
+                        Spacer()
                     }
                     .toolbar {
                         ToolbarItem {
-                            Button(action: {}, label: {
-                                Image(systemName: "wallet.pass")
+                            Button(action: {
+                                // Navigate to Wallet
+                                fatalError()
+                            }, label: {
+                                Image(systemName: "wallet.fill")
                                     .foregroundStyle(Color.indigo.opacity(50))
                             })
                         }
@@ -49,63 +78,14 @@ extension MainFeature {
                 send(.onAppear)
             }
             .alert($store.scope(state: \.alert, action: \.alert))
-        }
-    }
-}
-
-struct SymbolItem: View {
-    let orderBook: OrderBook
-    
-    var body: some View {
-        VStack {
-            ZStack {
-                Capsule(style: .continuous)
-                    .tint(.indigo)
-                    .shadow(color: .indigo.opacity(50), radius: 2)
-//                    .padding(5)
-                //            Text(orderBook.bids.first?.first ?? "N/A")
-                //                                .font(.caption)
-                //                                .foregroundStyle(.white)
-                //            Text(orderBook.asks.first?.first ?? "N/A")
-                //                                .font(.caption)
-                //                                .foregroundStyle(.white)
-                HStack(alignment: .firstTextBaseline, spacing: 10) {
-                    Image(orderBook.pair.symbol.from)
-                        .resizable()
-                        .frame(width: 25, height: 25)
-                    Text(orderBook.pair.symbol.from.description)
-                        .font(.title2)
-                        .foregroundStyle(.white)
-                    Spacer()
-                    Text(orderBook.fetchedOrderBook.highestBid?.formattedPrice ?? "N/A")
-                        .font(.caption)
-                        .foregroundStyle(.white)
-                    Text(orderBook.fetchedOrderBook.lowestAsk?.formattedPrice ?? "N/A")
-                        .font(.caption)
-                        .foregroundStyle(.white)
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 5)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: 50)
-        .padding(5)
     }
 }
 
 
-struct Header: View {
-    var body: some View {
-        HStack(spacing: 30) {
-            Text("Name")
-                .foregroundStyle(Color("AccentColor"))
-            Spacer()
-            Text("Bid")
-                .foregroundStyle(Color("AccentColor"))
-            Text("Ask")
-                .foregroundStyle(Color("AccentColor"))
-        }
-        .padding(.leading)
-        .padding(.trailing, 50)
-    }
-}
+
+
+
+
+
