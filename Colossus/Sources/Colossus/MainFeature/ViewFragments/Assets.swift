@@ -3,7 +3,11 @@ import Foundation
 import Charts
 
 struct MyAssets: View {
-    var assets: [any Asset] = mockableAssets
+    var assets: [any Asset]
+    
+    init(assets: [any Asset] = mockableAssets) {
+        self.assets = assets
+    }
     var body: some View {
         VStack {
             HStack {
@@ -26,18 +30,20 @@ struct MyAssets: View {
 
 struct MockableAsset: Asset, Hashable {
     var name: String
-    
     var ticker: String
-    
-    var quantity: Float
-    
+    var quantity: String
     var image: Image
-    
-    var price: Float
-    
+    var price: String
     var historicalPrice: [Float]
     
-    public init(name: String, ticker: String, quantity: Float, image: Image, price: Float, historicalPrice: [Float]) {
+    public init(
+        name: String,
+        ticker: String,
+        quantity: String,
+        image: Image,
+        price: String,
+        historicalPrice: [Float]
+    ) {
         self.name = name
         self.ticker = ticker
         self.quantity = quantity
@@ -118,7 +124,7 @@ struct AssetView: View {
                         Text(asset.price.description)
                             .font(.subheadline)
                             .foregroundStyle(Color.white)
-                        Text("\(asset.price * asset.quantity)")
+                        Text("\(Float(asset.price) ?? 0.0 * (Float(asset.quantity) ?? 0.0))")
                             .font(.caption)
                             .foregroundStyle(Color("AccentColor"))
                     }
@@ -134,15 +140,78 @@ struct AssetView: View {
 protocol Asset: Hashable {
     var name: String { get }
     var ticker: String { get }
-    var quantity: Float { get }
+    var quantity: String { get }
     var image: Image { get }
-    var price: Float { get }
+    var price: String { get }
     var historicalPrice: [Float] { get }
 }
 
 let mockableAssets: [MockableAsset] = [
-    MockableAsset(name: "Blob", ticker: "BLB", quantity: 1, image: Image(systemName: "cross"), price: 123, historicalPrice: [122, 145.1, 162.25, 112.2, 114, 116]),
-    MockableAsset(name: "Blob Jr", ticker: "BLBJR", quantity: 2, image: Image(systemName: "square"), price: 23, historicalPrice: [26, 52, 56, 55, 42, 41]),
-    MockableAsset(name: "Blob SR", ticker: "BLBSR", quantity: 3, image: Image(systemName: "circle"), price: 2351.23, historicalPrice: [2341, 2421, 2345, 2445, 2211, 2111]),
-    MockableAsset(name: "Blob Jr Jr", ticker: "JRBLB", quantity: 1, image: Image(systemName: "car"), price: 12.421, historicalPrice: [13, 14, 12, 16, 17, 19]),
+    MockableAsset(
+        name: "Blob",
+        ticker: "BLB",
+        quantity: "1",
+        image: Image(systemName: "cross"),
+        price: "123",
+        historicalPrice: [122, 145.1, 162.25, 112.2, 114, 116]
+    ),
+    MockableAsset(
+        name: "Blob Jr",
+        ticker: "BLBJR",
+        quantity: "2",
+        image: Image(systemName: "square"),
+        price: "23",
+        historicalPrice: [26, 52, 56, 55, 42, 41]
+    ),
+    MockableAsset(
+        name: "Blob SR",
+        ticker: "BLBSR",
+        quantity: "3",
+        image: Image(systemName: "circle"),
+        price: "2351.23",
+        historicalPrice: [2341, 2421, 2345, 2445, 2211, 2111]
+    ),
+    MockableAsset(
+        name: "Blob Jr Jr",
+        ticker: "JRBLB",
+        quantity: "1",
+        image: Image(systemName: "car"),
+        price: "12.421",
+        historicalPrice: [13, 14, 12, 16, 17, 19]
+    ),
 ]
+
+// Naive implementation of conformance. Need to change into Floats and add real data. Re-write all when switching API's
+extension OrderBook: Asset {
+    var name: String {
+        self.pair.symbol.from
+    }
+    
+    var ticker: String {
+        self.pair.symbol.from
+    }
+    
+    var quantity: String {
+        self.fetchedOrderBook.lowestAsk?.amount ?? "0.0"
+    }
+    
+    var image: Image {
+        Image(self.pair.symbol.from)
+    }
+    
+    var price: String {
+        self.fetchedOrderBook.lowestAsk?.price ?? "0"
+    }
+    
+    var historicalPrice: [Float] {
+        guard let float1 = Float(self.fetchedOrderBook.lowestAsk?.amount ?? "0.0") else {
+            return [0]
+        }
+        guard let float2 = Float(self.fetchedOrderBook.highestBid?.amount ?? "0.0") else {
+            return [0]
+        }
+        return [float1, float2]
+    }
+    
+    
+}
