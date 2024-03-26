@@ -44,7 +44,33 @@ public struct Symbol: Codable, Equatable {
         case sizePrecision = "size_precision"
     }
     
-    public init(symbolid: String?, exchangeid: String?, symbolType: String?, assetidBase: String?, assetidQuote: String?, dataStart: String?, dataEnd: String?, dataQuoteStart: String?, dataQuoteEnd: String?, dataOrderbookStart: String?, dataOrderbookEnd: String?, dataTradeStart: String?, dataTradeEnd: String?, volume1Hrs: Double?, volume1HrsUsd: Double?, volume1Day: Double?, volume1DayUsd: Double?, volume1Mth: Double?, volume1MthUsd: Double?, price: Double?, symbolidExchange: String?, assetidBaseExchange: String?, assetidQuoteExchange: String?, pricePrecision: Double?, sizePrecision: Double?) {
+    public init(
+        symbolid: String?,
+        exchangeid: String?,
+        symbolType: String?,
+        assetidBase: String?,
+        assetidQuote: String?,
+        dataStart: String?,
+        dataEnd: String?,
+        dataQuoteStart: String?,
+        dataQuoteEnd: String?,
+        dataOrderbookStart: String?,
+        dataOrderbookEnd: String?,
+        dataTradeStart: String?,
+        dataTradeEnd: String?,
+        volume1Hrs: Double?,
+        volume1HrsUsd: Double?,
+        volume1Day: Double?,
+        volume1DayUsd: Double?,
+        volume1Mth: Double?,
+        volume1MthUsd: Double?,
+        price: Double?,
+        symbolidExchange: String?,
+        assetidBaseExchange: String?,
+        assetidQuoteExchange: String?,
+        pricePrecision: Double?,
+        sizePrecision: Double?
+    ) {
         self.symbolid = symbolid
         self.exchangeid = exchangeid
         self.symbolType = symbolType
@@ -198,5 +224,83 @@ extension OrderBook: QueryItemsExpressible {
         }
         return listOfQueryItems
     }
+}
+
+extension OrderBook {
+    public static let mock: [Self] = [
+        Self.init(
+            pair: .init(
+                from: "BTC",
+                to: "USDT",
+                limit: 1
+            ),
+            fetchedOrderBook: .init(
+                lastUpdateId: 11,
+                bids: [.init(
+                    price: "67000",
+                    amount: "1"
+                )],
+                asks: [.init(
+                    price: "67001",
+                    amount: "2"
+                )]
+            )
+        ),
+        Self.init(
+            pair: .init(
+                from: "ETH",
+                to: "USDT",
+                limit: 1
+            ),
+            fetchedOrderBook: .init(
+                lastUpdateId: 11,
+                bids: [.init(
+                    price: "1234",
+                    amount: "1"
+                )],
+                asks: [.init(
+                    price: "1233",
+                    amount: "2"
+                )]
+            )
+        ),
+        Self.init(
+            pair: .init(
+                from: "SOL",
+                to: "USDT",
+                limit: 1
+            ),
+            fetchedOrderBook: .init(
+                lastUpdateId: 11,
+                bids: [.init(
+                    price: "255",
+                    amount: "1"
+                )],
+                asks: [.init(
+                    price: "256",
+                    amount: "2"
+                )]
+            )
+        ),
+        Self.init(
+            pair: .init(
+                from: "ADA",
+                to: "USDT",
+                limit: 1
+            ),
+            fetchedOrderBook: .init(
+                lastUpdateId: 11,
+                bids: [.init(
+                    price: "26.23",
+                    amount: "2"
+                )],
+                asks: [.init(
+                    price: "26.25",
+                    amount: "11"
+                )]
+            )
+        ),
+                                      
+    ]
 }
 

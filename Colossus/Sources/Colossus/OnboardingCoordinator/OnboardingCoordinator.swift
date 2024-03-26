@@ -64,8 +64,10 @@ public struct OnboardingCoordinator {
                     NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
                         VStack {
                             Image(systemName: "bitcoinsign.circle")
+                                .resizable()
+                                .scaledToFit()
                                 .frame(width: 400, height: 400, alignment: .center)
-                                .tint(Color.indigo)
+                                .foregroundStyle(Color.indigo)
                             Button("Begin Onboarding") {
                                 store.send(.beginOnboardingTapped)
                             }
@@ -91,6 +93,7 @@ public struct OnboardingCoordinator {
 
 
 
+// Create new store, do not scope.
 @Reducer
 public struct Wallet {}
 
