@@ -7,13 +7,20 @@ import CryptoServiceUniFFI
 public struct ApiClient: DependencyKey {
     public typealias GetSymbols = @Sendable () async throws -> ([Symbol])
     public typealias GetOrderbook = @Sendable (AssetPair) async throws -> (AnonymousOrderBook)
+    public typealias GetListOfCoins = @Sendable (ListOfCoinsRequest) async throws -> ([Coin])
 //    public typealias GetOrderbook = @Sendable (AssetPair) async throws -> (OrderBook)
     public var getSymbols: GetSymbols
     public var getOrderbook: GetOrderbook
+    public var getListOfCoins: GetListOfCoins
     
-    public init(getSymbols: @escaping GetSymbols, getOrderbook: @escaping GetOrderbook) {
+    public init(
+        getSymbols: @escaping GetSymbols,
+        getOrderbook: @escaping GetOrderbook,
+        getListOfCoins: @escaping GetListOfCoins
+    ) {
         self.getSymbols = getSymbols
         self.getOrderbook = getOrderbook
+        self.getListOfCoins = getListOfCoins
     }
     
 }
@@ -96,9 +103,21 @@ extension ApiClient {
 //                let client = Client(binanceKey: binanceKey ?? "", coinApiKey: coinKey ?? "")
 //                return await client.getOrderbook(params: .init(symbol: assetPair.symbol.description, limit: UInt16(assetPair.limit ?? 1)))
                 try await get(assetPair, path: "orderbooks", decodeAs: AnonymousOrderBook.self)
+            }, getListOfCoins: { request in
+                try await get(request, path: "", decodeAs: [Coin].self)
+                
+                
             }
         )
     }
+}
+
+extension ListOfCoinsRequest: QueryItemsExpressible {
+    public var queryItems: [URLQueryItem] {
+        []
+    }
+    
+    
 }
 
 public enum Method {
@@ -138,8 +157,15 @@ public enum Method {
 extension ApiClient {
     
     public static let testValue = Self(
-        getSymbols: unimplemented("\(Self.self).getSymbols"), 
-        getOrderbook: unimplemented("\(Self.self).getOrderBook")
+        getSymbols: unimplemented(
+            "\(Self.self).getSymbols"
+        ),
+        getOrderbook: unimplemented(
+            "\(Self.self).getOrderBook"
+        ),
+        getListOfCoins: unimplemented(
+            "\(Self.self).getListOfCoins"
+        )
     )
 }
 

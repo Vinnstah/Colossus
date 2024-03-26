@@ -14,7 +14,9 @@ extension MainFeature {
                         Color("Background").ignoresSafeArea()
                         VStack {
                             cryptoScrollView()
-                                .frame(height: store.isExpandingCryptoScrollView ? (geo.size.height / 1.5) : geo.size.height / 3)
+                                .frame(
+                                    height: store.isExpandingCryptoScrollView ? (geo.size.height / 1.5) : geo.size.height / 3
+                                )
                                 .animation(.easeIn, value: store.isExpandingCryptoScrollView)
                                 .padding(.bottom, 25)
                                 .padding(.horizontal, 10)
