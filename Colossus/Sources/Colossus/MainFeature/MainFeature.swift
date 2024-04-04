@@ -5,9 +5,10 @@ import IdentifiedCollections
 import CryptoServiceUniFFI
 
 @Reducer
-public struct MainFeature {
+public struct MainFeature : Sendable{
     @Dependency(\.apiClient) var apiClient
     @Dependency(\.uuid) var uuid
+    @Dependency(\.rustGateway) var rustGateway
     
     @Reducer(state: .equatable)
     public enum Path {
@@ -26,7 +27,7 @@ public struct MainFeature {
         var isExpandingCryptoScrollView: Bool = false
     }
     
-    public enum Action: ViewAction {
+    public enum Action: ViewAction, Sendable {
         case alert(PresentationAction<Alert>)
         case orderbookResult(Result<AnonymousOrderBook, Swift.Error>, AssetPair)
         //        case orderbookResult(Result<OrderBook, Swift.Error>, AssetPair)
@@ -51,18 +52,22 @@ public struct MainFeature {
                 
             case .view(.onAppear):
                 return .run { [symbols = state.symbols] send in
-                    await withThrowingTaskGroup(of: Void.self) { group in
-                        for assetPair in symbols {
-                            group.addTask {
-                                let result = await Result {
-                                    try await apiClient.getOrderbook(
-                                        assetPair
-                                    )
-                                }
-                                await send(.orderbookResult(result, assetPair))
-                            }
-                        }
-                    }
+//                    try await self.rustGateway.getListOfCoins()
+//                    try await self.rustGateway.getMetaInfoCoin("BTsaC")
+//                    print(try await apiClient.getAggregatedListOfCoins(.init(currency: "USD", sort: "rank", order: "ascending", offset: 0, limit: 15, meta: false)))
+                    
+//                    await withThrowingTaskGroup(of: Void.self) { group in
+//                        for assetPair in symbols {
+//                            group.addTask {
+//                                let result = await Result {
+//                                    try await apiClient.getOrderbook(
+//                                        assetPair
+//                                    )
+//                                }
+//                                await send(.orderbookResult(result, assetPair))
+//                            }
+//                        }
+//                    }
                 }
                 
             case .view(.seeAllTapped):

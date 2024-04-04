@@ -304,3 +304,65 @@ extension OrderBook {
     ]
 }
 
+//public struct ListOfCoinsRequest: Codable {
+//    public let currency: String
+//    public let sort: String
+//    public let order: String
+//    public let offset: UInt8
+//    public let limit: UInt32
+//    public let meta: Bool
+//
+//    // Default memberwise initializers are never public by default, so we
+//    // declare one manually.
+//    public init(
+//        currency: String,
+//        sort: String,
+//        order: String,
+//        offset: UInt8,
+//        limit: UInt32,
+//        meta: Bool
+//    ) {
+//        self.currency = currency
+//        self.sort = sort
+//        self.order = order
+//        self.offset = offset
+//        self.limit = limit
+//        self.meta = meta
+//    }
+//}
+//public enum Sort:String, Codable, RawRepresentable {
+//    case rank
+//    case price
+//    case volume
+//    case code
+//    case name
+//    case age
+//    
+//}
+//
+//public struct AggregatedCoinInformations: Codable {
+//    public let name: String
+//    public let symbol: String
+//    public let rank: Int64?
+//    public let rate: Double
+//    public let color: String
+//    public let png64: String
+//
+//    // Default memberwise initializers are never public by default, so we
+//    // declare one manually.
+//    public init(
+//        name: String,
+//        symbol: String,
+//        rank: Int64?,
+//        rate: Double,
+//        color: String,
+//        png64: String
+//    ) {
+//        self.name = name
+//        self.symbol = symbol
+//        self.rank = rank
+//        self.rate = rate
+//        self.color = color
+//        self.png64 = png64
+//    }
+//}

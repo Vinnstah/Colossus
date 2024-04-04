@@ -7,20 +7,20 @@ import CryptoServiceUniFFI
 public struct ApiClient: DependencyKey {
     public typealias GetSymbols = @Sendable () async throws -> ([Symbol])
     public typealias GetOrderbook = @Sendable (AssetPair) async throws -> (AnonymousOrderBook)
-    public typealias GetListOfCoins = @Sendable (ListOfCoinsRequest) async throws -> ([Coin])
+//    public typealias GetAggregatedListOfCoins = @Sendable (ListOfCoinsRequest) async throws -> ([AggregatedCoinInformation])
 //    public typealias GetOrderbook = @Sendable (AssetPair) async throws -> (OrderBook)
     public var getSymbols: GetSymbols
     public var getOrderbook: GetOrderbook
-    public var getListOfCoins: GetListOfCoins
+//    public var getAggregatedListOfCoins: GetAggregatedListOfCoins
     
     public init(
         getSymbols: @escaping GetSymbols,
-        getOrderbook: @escaping GetOrderbook,
-        getListOfCoins: @escaping GetListOfCoins
+        getOrderbook: @escaping GetOrderbook
+//        getAggregatedListOfCoins: @escaping GetAggregatedListOfCoins
     ) {
         self.getSymbols = getSymbols
         self.getOrderbook = getOrderbook
-        self.getListOfCoins = getListOfCoins
+//        self.getAggregatedListOfCoins = getAggregatedListOfCoins
     }
     
 }
@@ -93,6 +93,14 @@ extension ApiClient {
             try await makeRequest(path: path, method: .get(queryItems: queryItemsExpressible?.queryItems ?? []))
         }
         
+        @Sendable func post<Response>(
+            _ request: Data,
+            path: String,
+            decodeAs: Response.Type = Response.self
+        ) async throws -> Response where Response: Decodable {
+            try await makeRequest(path: path, method: .post(data: request))
+        }
+        
         return Self(
             getSymbols: {
                 return try await get(nil, path: "symbols", decodeAs: [Symbol].self)
@@ -103,11 +111,12 @@ extension ApiClient {
 //                let client = Client(binanceKey: binanceKey ?? "", coinApiKey: coinKey ?? "")
 //                return await client.getOrderbook(params: .init(symbol: assetPair.symbol.description, limit: UInt16(assetPair.limit ?? 1)))
                 try await get(assetPair, path: "orderbooks", decodeAs: AnonymousOrderBook.self)
-            }, getListOfCoins: { request in
-                try await get(request, path: "", decodeAs: [Coin].self)
-                
-                
             }
+//            , getAggregatedListOfCoins: { request in
+////                let data = try encode.callAsFunction(request)
+//                return try await post(data, path: "coins/list/aggregated", decodeAs: [AggregatedCoinInformation].self)
+                
+                
         )
     }
 }
@@ -162,10 +171,10 @@ extension ApiClient {
         ),
         getOrderbook: unimplemented(
             "\(Self.self).getOrderBook"
-        ),
-        getListOfCoins: unimplemented(
-            "\(Self.self).getListOfCoins"
         )
+//        getAggregatedListOfCoins: unimplemented(
+//            "\(Self.self).getListOfCoins"
+//        )
     )
 }
 
@@ -177,23 +186,3 @@ extension DependencyValues {
 }
 
 
-public protocol NetworkManager {
-    func send() -> Bool
-    func create() -> Result<Bool, Error>
-}
-
-public struct RustApiClient: NetworkManager {
-    public func send() -> Bool {
-        URLSession().dataTask(with: URLRequest.init(url: URL.init(string: "tst")!)) { completion,data,err  in
-            
-            return
-        }
-        return true
-    }
-    
-    public func create() -> Result<Bool, Error> {
-        return .success(true)
-    }
-    
-    
-}

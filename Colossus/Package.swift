@@ -2,6 +2,10 @@
 
 import PackageDescription
 
+var swiftSettings: [SwiftSetting] = [
+    .enableExperimentalFeature("StrictConcurrency")
+]
+
 let package = Package(
     name: "Colossus",
     platforms: [
@@ -13,8 +17,7 @@ let package = Package(
             targets: ["Colossus"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Vinnstah/crypto-service", from: "0.1.4"),
-//        .package(url: "https://github.com/Vinnstah/crypto-service", from: "0.1.2"),
+        .package(url: "https://github.com/Vinnstah/crypto-service", exact: "0.3.1"),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", branch: "shared-state-beta"),
         .package(url: "https://github.com/tgrapperon/swift-dependencies-additions", from: "1.0.1"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.2.1"),
@@ -27,7 +30,8 @@ let package = Package(
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "DependenciesAdditions", package: "swift-dependencies-additions"),
                 .product(name: "Dependencies", package: "swift-dependencies"),
-            ]
+            ],
+            swiftSettings: swiftSettings
         ),
     ]
 )

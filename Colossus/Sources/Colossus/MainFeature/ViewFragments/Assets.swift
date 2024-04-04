@@ -23,6 +23,7 @@ struct MyAssets: View {
                     }
                 }
             }
+            .scrollIndicators(.hidden)
         }
         
     }
@@ -103,6 +104,7 @@ struct AssetView: View {
                     .chartYScale(domain: asset.historicalPrice.min()!...asset.historicalPrice.max()!)
                     .frame(height: 50, alignment: .bottomTrailing)
             }
+            .clipShape(.rect(cornerSize: .init(width: 15, height: 15)))
             VStack {
                 HStack {
                     asset.image
@@ -131,6 +133,7 @@ struct AssetView: View {
                 }
                 Spacer()
             }
+            .clipShape(.rect(cornerSize: .init(width: 15, height: 15)))
             .padding(20)
         }
         .frame(width: 150, height: 150, alignment: .center)

@@ -17,7 +17,7 @@ extension MainFeature {
                                 .frame(
                                     height: store.isExpandingCryptoScrollView ? (geo.size.height / 1.5) : geo.size.height / 3
                                 )
-                                .animation(.easeIn, value: store.isExpandingCryptoScrollView)
+                                .animation(.easeIn(duration: 0.5), value: store.isExpandingCryptoScrollView)
                                 .padding(.bottom, 25)
                                 .padding(.horizontal, 10)
                             
