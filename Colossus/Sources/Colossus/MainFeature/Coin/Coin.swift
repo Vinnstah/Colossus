@@ -1,6 +1,20 @@
 import Foundation
+import CryptoServiceUniFFI
 import SwiftUI
 
+extension Coin: Identifiable {
+    public var id: String {
+        self.code ?? ""
+    }
+}
+
+extension CoinMeta: Identifiable {
+    public var id: UUID {
+        UUID()
+    }
+}
+
+extension CoinMeta: @unchecked Sendable {}
 //public struct AggregatedCoinInformation: Codable {
 //    public let name: String
 //    public let symbol: String

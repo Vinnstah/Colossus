@@ -19,6 +19,7 @@ public struct MainFeature : Sendable{
     public struct State: Equatable {
         @Presents var alert: AlertState<MainFeature.Action.Alert>?
         public var path = StackState<Path.State>()
+        public var coins: IdentifiedArrayOf<CoinMeta> = []
         public var orderBooks: [OrderBook] = []
         public var symbols: [AssetPair] = AssetPair.listOfAssetPairs
         let user: User
@@ -29,8 +30,7 @@ public struct MainFeature : Sendable{
     
     public enum Action: ViewAction, Sendable {
         case alert(PresentationAction<Alert>)
-        case orderbookResult(Result<AnonymousOrderBook, Swift.Error>, AssetPair)
-        //        case orderbookResult(Result<OrderBook, Swift.Error>, AssetPair)
+        case orderbookResult(Result<[CoinMeta], Swift.Error>)
         case view(View)
         case path(StackAction<Path.State, Path.Action>)
         
@@ -47,39 +47,44 @@ public struct MainFeature : Sendable{
     }
     
     public var body: some ReducerOf<Self> {
-        Reduce { state, action in
+        Reduce {
+            state,
+            action in
             switch action {
                 
             case .view(.onAppear):
-                return .run { [symbols = state.symbols] send in
-//                    try await self.rustGateway.getListOfCoins()
-//                    try await self.rustGateway.getMetaInfoCoin("BTsaC")
-//                    print(try await apiClient.getAggregatedListOfCoins(.init(currency: "USD", sort: "rank", order: "ascending", offset: 0, limit: 15, meta: false)))
+                return .run { send in
                     
-//                    await withThrowingTaskGroup(of: Void.self) { group in
-//                        for assetPair in symbols {
-//                            group.addTask {
-//                                let result = await Result {
-//                                    try await apiClient.getOrderbook(
-//                                        assetPair
-//                                    )
-//                                }
-//                                await send(.orderbookResult(result, assetPair))
-//                            }
-//                        }
+                    //                    await withThrowingTaskGroup(of: Void.self) { group in
+                    //                        for assetPair in symbols {
+                    //                            group.addTask {
+//                    let result = await Result {
+//                        try await self.rustGateway.getListOfCoins()
+//                        //                                    try await self.rustGateway.getCoinMetaInfo(assetPair.symbol.from)
 //                    }
+                    await send(
+                        .orderbookResult(
+                            await Result {
+                                try await self.rustGateway.getListOfCoins()
+                            }
+                        )
+                    )
+                    //                            }
+                    //                        }
+                    
+                    //                    }
                 }
                 
             case .view(.seeAllTapped):
                 state.isExpandingCryptoScrollView.toggle()
                 return .none
                 
-            case let .orderbookResult(.success(orderbook), assetPair):
-                let orderbook = OrderBook(pair: assetPair, fetchedOrderBook: orderbook)
-                state.orderBooks.append(orderbook)
+            case let .orderbookResult(.success(coins)):
+                print("12345")
+                state.coins.append(contentsOf: coins)
                 return .none
                 
-            case let .orderbookResult(.failure(error), assetPair):
+            case let .orderbookResult(.failure(error)):
 #if DEBUG
                 state.orderBooks = OrderBook.mock
                 
@@ -105,7 +110,8 @@ public struct MainFeature : Sendable{
                 return .run { send in
                     await send(.view(.onAppear)) }
                 
-            case .alert, .path:
+            case .alert,
+                    .path:
                 return .none
                 
             case let .view(.inspectCoinTapped(orderBook)):

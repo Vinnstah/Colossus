@@ -3,7 +3,7 @@ import Foundation
 import Dependencies
 
 public struct RustAPIClient: DependencyKey, Sendable {
-    public typealias GetListOfCoins = @Sendable () async throws -> [Coin]
+    public typealias GetListOfCoins = @Sendable () async throws -> [CoinMeta]
     public typealias GetCoinMetaInfo = @Sendable (String) async throws -> CoinMeta
     
     var getListOfCoins: GetListOfCoins

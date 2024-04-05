@@ -17,7 +17,7 @@ let package = Package(
             targets: ["Colossus"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Vinnstah/crypto-service", exact: "0.3.1"),
+        .package(url: "https://github.com/Vinnstah/crypto-service", exact: "0.3.3"),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", branch: "shared-state-beta"),
         .package(url: "https://github.com/tgrapperon/swift-dependencies-additions", from: "1.0.1"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.2.1"),
