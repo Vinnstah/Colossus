@@ -24,7 +24,7 @@ public struct RustAPIClient: DependencyKey, Sendable {
         
         return Self(
             getListOfCoins: {
-                return try await client.getListOfCoins(limit: 10)
+                return try await client.getListOfCoins(limit: 15)
             }, getCoinMetaInfo: { symbol in
                 return try await client.getCoinMetaInfo(code: symbol)
             } )

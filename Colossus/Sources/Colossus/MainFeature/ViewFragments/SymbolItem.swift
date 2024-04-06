@@ -18,8 +18,8 @@ struct SymbolItem: View {
             } placeholder: {
                 ProgressView()
             }
-                .frame(width: 25, height: 25)
-                
+            .frame(width: 25, height: 25)
+            
             VStack(alignment: .leading) {
                 Text(coin?.name ?? "")
                     .foregroundStyle(Color.white)
@@ -31,12 +31,19 @@ struct SymbolItem: View {
             Spacer()
             
             VStack(alignment: .trailing) {
-                Text(coin?.delta?.hour.convertDeltaToDeciamlPercentage() ?? 0, format: .percent)
-                    .font(.caption)
-                    .foregroundStyle(.white)
-                
-                Text(coin?.delta?.hour.convertDeltaToDeciamlPercentage() ?? 0 > 0 ? "Trending" : "Declining")
-                    .foregroundStyle(((coin?.delta?.hour ?? 0) - 1) > 0 ? Color.green : Color.red)
+                Text(coin?.rate ?? 0, format: .number.precision(.fractionLength(3)))
+                    .foregroundStyle(Color.white)
+                HStack {
+                    Text(
+                        coin?.delta?.hour.convertDeltaToDeciamlPercentage() ?? 0,
+                        format: .percent
+                    )
+                        .font(.caption)
+                        .foregroundStyle(.white)
+                    
+                    Image(systemName: coin?.delta?.hour.convertDeltaToDeciamlPercentage() ?? 0 > 0 ? "arrow.up.forward" : "arrow.down.right")
+                        .foregroundStyle(((coin?.delta?.hour ?? 0) - 1) > 0 ? Color.green : Color.red)
+                }
             }
             
             

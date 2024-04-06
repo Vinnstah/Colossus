@@ -1,4 +1,5 @@
 import SwiftUI
+import CryptoServiceUniFFI
 import Foundation
 import Charts
 
@@ -148,6 +149,33 @@ protocol Asset: Hashable {
     var price: String { get }
     var historicalPrice: [Float] { get }
 }
+
+//extension CoinMeta: Asset {
+//    var name: String {
+//        self.name ?? ""
+//    }
+//    
+//    var ticker: String {
+//        self.code ?? ""
+//    }
+//    
+//    var quantity: String {
+//        <#code#>
+//    }
+//    
+//    var image: Image {
+//fatalError()    }
+//    
+//    var price: String {
+//        <#code#>
+//    }
+//    
+//    var historicalPrice: [Float] {
+//        <#code#>
+//    }
+//    
+//    
+//}
 
 let mockableAssets: [MockableAsset] = [
     MockableAsset(
