@@ -7,7 +7,7 @@ public struct CoinFeature {
     
     @ObservableState
     public struct State: Equatable {
-        let orderBook: OrderBook? 
+        let coin: CoinHistory
     }
     
     public enum Action {

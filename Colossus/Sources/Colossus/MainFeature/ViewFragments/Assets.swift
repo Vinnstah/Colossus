@@ -60,11 +60,8 @@ struct MockableAsset: Asset, Hashable {
     
 }
 
-
-struct AssetView: View {
-    let asset: any Asset
-    
-    let areaGradient = LinearGradient(
+extension LinearGradient {
+    static let areaGradient = LinearGradient(
             gradient: Gradient (
                 colors: [
                     Color.indigo.opacity(0.3),
@@ -76,6 +73,11 @@ struct AssetView: View {
             startPoint: .top,
             endPoint: .bottom
         )
+}
+struct AssetView: View {
+    let asset: any Asset
+    
+    
     var body: some View {
         ZStack {
             Rectangle()
@@ -97,7 +99,7 @@ struct AssetView: View {
                             x: .value("xAxis", index),
                             y: .value("Price", asset.historicalPrice[index])
                         )
-                        .foregroundStyle(areaGradient)
+                        .foregroundStyle(LinearGradient.areaGradient)
                     }
                     .chartLegend(.hidden)
                     .chartXAxis(.hidden)
@@ -150,32 +152,37 @@ protocol Asset: Hashable {
     var historicalPrice: [Float] { get }
 }
 
-//extension CoinMeta: Asset {
-//    var name: String {
-//        self.name ?? ""
-//    }
-//    
-//    var ticker: String {
-//        self.code ?? ""
-//    }
-//    
-//    var quantity: String {
-//        <#code#>
-//    }
-//    
-//    var image: Image {
-//fatalError()    }
-//    
-//    var price: String {
-//        <#code#>
-//    }
-//    
-//    var historicalPrice: [Float] {
-//        <#code#>
-//    }
-//    
-//    
-//}
+extension CoinMeta: Asset {
+    var name: String {
+        self.symbol ?? ""
+    }
+    
+    var ticker: String {
+        self.code ?? ""
+    }
+    
+    var quantity: String {
+        return "1"
+    }
+    
+    var image: Image {
+        Image(systemName: "cross")
+    }
+    
+    var price: String {
+        "\(self.rate ?? 0)"
+    }
+    
+    var historicalPrice: [Float] {
+        var prices: [Float] = []
+        prices.append(Float(self.delta?.day ?? 0))
+        prices.append(Float(self.delta?.week ?? 0))
+        prices.append(Float(self.delta?.month ?? 0))
+        return prices
+    }
+    
+    
+}
 
 let mockableAssets: [MockableAsset] = [
     MockableAsset(

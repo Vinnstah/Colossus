@@ -15,6 +15,7 @@ extension CoinMeta: Identifiable {
 }
 
 extension CoinMeta: @unchecked Sendable {}
+extension CoinHistory: @unchecked Sendable {}
 //public struct AggregatedCoinInformation: Codable {
 //    public let name: String
 //    public let symbol: String

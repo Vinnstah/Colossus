@@ -4,17 +4,21 @@ import Dependencies
 
 public struct RustAPIClient: DependencyKey, Sendable {
     public typealias GetListOfCoins = @Sendable () async throws -> [CoinMeta]
-    public typealias GetCoinMetaInfo = @Sendable (String) async throws -> CoinMeta
+    public typealias GetCoinMetaInfo = @Sendable (CoinMetaRequest) async throws -> CoinMeta
+    public typealias GetCoinHistory = @Sendable (CoinHistoryRequest) async throws -> CoinHistory
     
     var getListOfCoins: GetListOfCoins
     var getCoinMetaInfo: GetCoinMetaInfo
+    var getCoinHistory: GetCoinHistory
     
     public init(
         getListOfCoins: @escaping GetListOfCoins,
-        getCoinMetaInfo: @escaping GetCoinMetaInfo
+        getCoinMetaInfo: @escaping GetCoinMetaInfo,
+        getCoinHistory: @escaping GetCoinHistory
     ) {
         self.getListOfCoins = getListOfCoins
         self.getCoinMetaInfo = getCoinMetaInfo
+        self.getCoinHistory = getCoinHistory
     }
     
     public static var liveValue: Self {
@@ -25,8 +29,10 @@ public struct RustAPIClient: DependencyKey, Sendable {
         return Self(
             getListOfCoins: {
                 return try await client.getListOfCoins(limit: 15)
-            }, getCoinMetaInfo: { symbol in
-                return try await client.getCoinMetaInfo(code: symbol)
+            }, getCoinMetaInfo: { request in
+                return try await client.getCoinMetaInfo(request: request)
+            }, getCoinHistory: { request in
+                return try await client.getCoinHistoryInfo(request: request)
             } )
     }
 }
@@ -38,6 +44,8 @@ extension RustAPIClient {
             "\(Self.self).getAggregatedListOfCoins"
         ), getCoinMetaInfo: unimplemented(
             "\(Self.self).getCoinMetaInfo"
+        ), getCoinHistory: unimplemented(
+            "\(Self.self).getCoinHistory"
         ))
 }
 

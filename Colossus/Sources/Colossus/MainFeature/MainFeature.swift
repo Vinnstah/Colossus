@@ -31,18 +31,19 @@ public struct MainFeature : Sendable{
     public enum Action: ViewAction, Sendable {
         case alert(PresentationAction<Alert>)
         case orderbookResult(Result<[CoinMeta], Swift.Error>)
+        case coinHistoryResult(Result<CoinHistory, Swift.Error>)
         case view(View)
         case path(StackAction<Path.State, Path.Action>)
         
-        public enum Alert: Equatable {
+        public enum Alert: Equatable, Sendable {
             case dissmissed
             case retry
         }
         
-        public enum View {
+        public enum View : Sendable{
             case onAppear
             case seeAllTapped
-            case inspectCoinTapped(OrderBook)
+            case inspectCoinTapped(CoinMeta)
         }
     }
     
@@ -69,10 +70,6 @@ public struct MainFeature : Sendable{
                             }
                         )
                     )
-                    //                            }
-                    //                        }
-                    
-                    //                    }
                 }
                 
             case .view(.seeAllTapped):
@@ -114,11 +111,48 @@ public struct MainFeature : Sendable{
                     .path:
                 return .none
                 
-            case let .view(.inspectCoinTapped(orderBook)):
-                state.path.append(.coin(.init(orderBook: orderBook)))
+            case let .view(.inspectCoinTapped(coin)):
+                print("Here1")
+                print(UInt64(Date().timeIntervalSince1970) - 605_000)
+                print("Here2")
+                print(UInt64(Date().timeIntervalSince1970) )
+                return .run { send in
+                    await send(
+                        .coinHistoryResult(
+                            await Result {
+                                try await self.rustGateway.getCoinHistory(
+                                    .init(
+                                        currency: "USD",
+                                        code: coin.code ?? "",
+//                                        start: UInt64(Date().millisecondsSince1970) - 605_000_000,
+                                        start: UInt64(Date().millisecondsSince1970) - 262_974_300_0,
+                                        end: UInt64(Date().millisecondsSince1970),
+                                        meta: true
+                                    )
+                                )
+                            }
+                        )
+                    )
+                    
+                }
+            case let .coinHistoryResult(.success(coinMeta)):
+                state.path.append(.coin(.init(coin: coinMeta)))
+                return.none
+                
+            case .coinHistoryResult(.failure):
                 return .none
             }
         }
         .forEach(\.path, action: \.path)
+    }
+}
+
+extension Date {
+    var millisecondsSince1970:Int64 {
+        Int64((self.timeIntervalSince1970 * 1000.0).rounded())
+    }
+    
+    init(milliseconds:Int64) {
+        self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
     }
 }

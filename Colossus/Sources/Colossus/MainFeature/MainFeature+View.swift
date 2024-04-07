@@ -62,19 +62,10 @@ extension MainFeature.View {
                 ScrollView {
                     ForEach(store.coins) { coin in
                         SymbolItem(coin: coin)
+                            .onTapGesture {
+                                send(.inspectCoinTapped(coin))
+                            }
                     }
-//                    ForEach(store.coins) { coin in
-//                        SymbolItem(coin: coin)
-//                    }
-//                    ForEach(store.orderBooks, id: \.self) { orderBook in
-//                        SymbolItem(orderBook: orderBook)
-//                            .onTapGesture {
-//                                send(.inspectCoinTapped(orderBook))
-//                            }
-//                    }
-//                                                .onTapGesture {
-//                                                    send(.inspectCoinTapped(coin))
-//                                                }
                 }
             } header: {
                 HStack {
