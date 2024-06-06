@@ -6,9 +6,9 @@ import CryptoServiceUniFFI
 
 @Reducer
 public struct MainFeature : Sendable{
-    @Dependency(\.apiClient) var apiClient
     @Dependency(\.uuid) var uuid
     @Dependency(\.rustGateway) var rustGateway
+    @Dependency(\.dataManager) var dataManager
     
     @Reducer(state: .equatable)
     public enum Path {
@@ -16,24 +16,25 @@ public struct MainFeature : Sendable{
     }
     
     @ObservableState
-    public struct State: Equatable {
+    public struct State: Equatable, Sendable {
         @Presents var alert: AlertState<MainFeature.Action.Alert>?
         public var path = StackState<Path.State>()
         public var coins: IdentifiedArrayOf<CoinMeta> = []
-        public var orderBooks: [OrderBook] = []
-        public var symbols: [AssetPair] = AssetPair.listOfAssetPairs
         let user: User
         var selectedTopic: User.Topic = .crypto
         
+        var timeInterval: TimeIntervalMilliseconds = .day
         var isExpandingCryptoScrollView: Bool = false
     }
     
-    public enum Action: ViewAction, Sendable {
+    public enum Action: ViewAction, Sendable, BindableAction {
+        case binding(BindingAction<State>)
         case alert(PresentationAction<Alert>)
-        case orderbookResult(Result<[CoinMeta], Swift.Error>)
+        case listOfCoinsResult(Result<[CoinMeta], Swift.Error>)
         case coinHistoryResult(Result<CoinHistory, Swift.Error>)
         case view(View)
         case path(StackAction<Path.State, Path.Action>)
+        case delegate(Delegate)
         
         public enum Alert: Equatable, Sendable {
             case dissmissed
@@ -44,10 +45,16 @@ public struct MainFeature : Sendable{
             case onAppear
             case seeAllTapped
             case inspectCoinTapped(CoinMeta)
+            case logOutTapped
+        }
+        
+        public enum Delegate: Equatable, Sendable {
+            case logOut
         }
     }
     
     public var body: some ReducerOf<Self> {
+        BindingReducer()
         Reduce {
             state,
             action in
@@ -59,12 +66,12 @@ public struct MainFeature : Sendable{
                     //                    await withThrowingTaskGroup(of: Void.self) { group in
                     //                        for assetPair in symbols {
                     //                            group.addTask {
-//                    let result = await Result {
-//                        try await self.rustGateway.getListOfCoins()
-//                        //                                    try await self.rustGateway.getCoinMetaInfo(assetPair.symbol.from)
-//                    }
+                    //                    let result = await Result {
+                    //                        try await self.rustGateway.getListOfCoins()
+                    //                        //                                    try await self.rustGateway.getCoinMetaInfo(assetPair.symbol.from)
+                    //                    }
                     await send(
-                        .orderbookResult(
+                        .listOfCoinsResult(
                             await Result {
                                 try await self.rustGateway.getListOfCoins()
                             }
@@ -76,14 +83,13 @@ public struct MainFeature : Sendable{
                 state.isExpandingCryptoScrollView.toggle()
                 return .none
                 
-            case let .orderbookResult(.success(coins)):
-                print("12345")
+            case let .listOfCoinsResult(.success(coins)):
                 state.coins.append(contentsOf: coins)
                 return .none
                 
-            case let .orderbookResult(.failure(error)):
+            case let .listOfCoinsResult(.failure(error)):
 #if DEBUG
-                state.orderBooks = OrderBook.mock
+                //                state.orderBooks = OrderBook.mock
                 
 #else
                 state.alert = AlertState {
@@ -112,11 +118,7 @@ public struct MainFeature : Sendable{
                 return .none
                 
             case let .view(.inspectCoinTapped(coin)):
-                print("Here1")
-                print(UInt64(Date().timeIntervalSince1970) - 605_000)
-                print("Here2")
-                print(UInt64(Date().timeIntervalSince1970) )
-                return .run { send in
+                return .run { [state = state] send in
                     await send(
                         .coinHistoryResult(
                             await Result {
@@ -124,8 +126,7 @@ public struct MainFeature : Sendable{
                                     .init(
                                         currency: "USD",
                                         code: coin.code ?? "",
-//                                        start: UInt64(Date().millisecondsSince1970) - 605_000_000,
-                                        start: UInt64(Date().millisecondsSince1970) - 262_974_300_0,
+                                        start: UInt64(Date().millisecondsSince1970) - state.timeInterval.rawValue,
                                         end: UInt64(Date().millisecondsSince1970),
                                         meta: true
                                     )
@@ -141,6 +142,14 @@ public struct MainFeature : Sendable{
                 
             case .coinHistoryResult(.failure):
                 return .none
+            case .binding, .delegate:
+                return .none
+            case .view(.logOutTapped):
+                return .run { send in
+                    try dataManager.logOutUser()
+                    
+                    await send(.delegate(.logOut))
+                }
             }
         }
         .forEach(\.path, action: \.path)
@@ -156,3 +165,24 @@ extension Date {
         self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
     }
 }
+
+enum TimeIntervalMilliseconds: UInt64, Hashable, CaseIterable {
+    case day = 864_000_00
+    case week = 604_800_000
+    case month = 262_974_300_0
+    case year = 315_569_260_00
+    
+    var descrition: String {
+        switch self {
+        case .day:
+            "Day"
+        case .week:
+            "Week"
+        case .month:
+            "Month"
+        case .year:
+            "Year"
+        }
+    }
+}
+

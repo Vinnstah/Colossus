@@ -9,13 +9,23 @@ extension CoinFeature {
         let store: StoreOf<CoinFeature>
         
         public var body: some SwiftUI.View  {
-            Text(store.coin.name ?? "")
-                .font(.headline)
-            Form {
-                Section("Price") {
-                    HistoricalGraph(history: store.coin.history ?? [])
+            ZStack {
+                Color("Background")
+                    .ignoresSafeArea()
+                VStack {
+                    Text(store.coin.name ?? "")
+                        .font(.headline)
+                        .foregroundStyle(Color.indigo.opacity(50))
+                    Form {
+                        Section("Price") {
+                            HistoricalGraph(history: store.coin.history ?? [])
+                        }
+                        .frame(width: 300, height: 300, alignment: .center)
+                        .foregroundStyle(.brown)
+                        .foregroundStyle(.ultraThinMaterial)
+                    }
+                    .listRowBackground(Color("Background").opacity(10))
                 }
-                
             }
         }
     }
@@ -29,7 +39,7 @@ struct HistoricalGraph: View {
             Chart(0..<history.count, id: \.self) {
                 index in
                 LineMark(
-                    x: .value("xAxis", history[index].date ?? 0),
+                    x: .value("xAxis", Date(milliseconds: history[index].date ?? 0).formatted()),
                     y: .value("Price", history[index].rate ?? 0)
                 )
                 .lineStyle(.init(lineWidth: 1.0))
@@ -42,7 +52,6 @@ struct HistoricalGraph: View {
                 .foregroundStyle(LinearGradient.areaGradient)
             }
             .chartLegend(.hidden)
-            //            .chartXAxis(.hidden)
             //            .chartYAxis(.hidden)
             
             // Horrendous code, please clean up these two.

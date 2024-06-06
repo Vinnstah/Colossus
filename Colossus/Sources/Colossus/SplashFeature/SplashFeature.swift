@@ -3,13 +3,13 @@ import SwiftUI
 import ComposableArchitecture
 
 @Reducer
-public struct SplashFeature {
+public struct SplashFeature : Sendable{
     @Dependency(\.continuousClock) var clock
     @Dependency(\.dataManager) var dataManager
     
     public struct State {}
     
-    public enum Action: ViewAction {
+    public enum Action: ViewAction, Sendable {
         case delegate(DelegateAction)
         case view(View)
         

@@ -61,5 +61,3 @@ extension URLSession: NetworkAntenna {
 class APIClient: Gateway {
     let client: Gateway = .init(networkAntenna:  URLSession.shared )
 }
-
-

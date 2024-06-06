@@ -3,7 +3,7 @@ import Foundation
 import SwiftUI
 
 @Reducer
-public struct OnboardingCoordinator {
+public struct OnboardingCoordinator : Sendable{
     @Reducer
     public enum Path {
         case personalInformation(PersonalInformation)
@@ -61,30 +61,30 @@ public struct OnboardingCoordinator {
         @Bindable var store: StoreOf<OnboardingCoordinator>
         
         var body: some View {
-                    NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-                        VStack {
-                            Image(systemName: "bitcoinsign.circle")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 400, height: 400, alignment: .center)
-                                .foregroundStyle(Color.indigo)
-                            Button("Begin Onboarding") {
-                                store.send(.beginOnboardingTapped)
-                            }
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color("Background").ignoresSafeArea())
-                    } destination: { store in
-                            switch store.case {
-                            case let .personalInformation(store):
-                                PersonalInformation.Screen(store: store)
-                            case let .wallet(store):
-                                EmptyView()
-                            case let .customizeHome(store):
-                                CustomizeHome.Screen(store: store)
-                            case let .summary(store):
-                                Summary.Screen(store: store)
-                            }
+            NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+                VStack {
+                    Image(systemName: "bitcoinsign.circle")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 400, height: 400, alignment: .center)
+                        .foregroundStyle(Color.indigo)
+                    Button("Begin Onboarding") {
+                        store.send(.beginOnboardingTapped)
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color("Background").ignoresSafeArea())
+            } destination: { store in
+                switch store.case {
+                case let .personalInformation(store):
+                    PersonalInformation.Screen(store: store)
+                case let .wallet(store):
+                    EmptyView()
+                case let .customizeHome(store):
+                    CustomizeHome.Screen(store: store)
+                case let .summary(store):
+                    Summary.Screen(store: store)
+                }
             }
             .tint(.indigo)
         }

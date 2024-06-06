@@ -3,36 +3,39 @@ import Dependencies
 import IdentifiedCollections
 import SwiftUI
 
-public struct DataManager: DependencyKey {
+public struct DataManager: DependencyKey, Sendable {
     public typealias FetchUser = () throws -> User?
     public typealias AddUser = (User) throws -> User
-//    public typealias FetchCoins = () throws -> IdentifiedArrayOf<Coin>?
-//    public typealias InsertCoin = (Coin) throws -> IdentifiedArrayOf<Coin>?
-//    public typealias DeleteCoin = (Coin) throws -> IdentifiedArrayOf<Coin>
+    public typealias LogOutUser = () throws -> ()
+    //    public typealias FetchCoins = () throws -> IdentifiedArrayOf<Coin>?
+    //    public typealias InsertCoin = (Coin) throws -> IdentifiedArrayOf<Coin>?
+    //    public typealias DeleteCoin = (Coin) throws -> IdentifiedArrayOf<Coin>
     
     public var fetchUser: FetchUser
     public var addUser: AddUser
-//    public var fetchCoins: FetchCoins
-//    public var insertCoin: InsertCoin
-//    public var deleteCoin: DeleteCoin
+    public var logOutUser: LogOutUser
+    //    public var fetchCoins: FetchCoins
+    //    public var insertCoin: InsertCoin
+    //    public var deleteCoin: DeleteCoin
     
     public init(
         fetchUser: @escaping FetchUser,
-        addUser: @escaping AddUser
-//        fetchCoins: @escaping FetchCoins,
-//        insertCoin: @escaping InsertCoin,
-//        deleteCoin: @escaping DeleteCoin
+        addUser: @escaping AddUser,
+        logOutUser: @escaping LogOutUser
+        //        fetchCoins: @escaping FetchCoins,
+        //        insertCoin: @escaping InsertCoin,
+        //        deleteCoin: @escaping DeleteCoin
     ) {
         self.fetchUser = fetchUser
         self.addUser = addUser
-//        self.fetchCoins = fetchCoins
-//        self.insertCoin = insertCoin
-//        self.deleteCoin = deleteCoin
+        self.logOutUser = logOutUser
+        //        self.fetchCoins = fetchCoins
+        //        self.insertCoin = insertCoin
+        //        self.deleteCoin = deleteCoin
     }
 }
 
 public extension DataManager {
-    
     
     static var liveValue: Self {
         @Dependency(\.userDefaults) var userDefaults
@@ -50,34 +53,36 @@ public extension DataManager {
                 let encodedUser = try encode(user)
                 userDefaults.set(encodedUser, forKey: .user)
                 return user
+            }, logOutUser: {
+                userDefaults.removeValue(forKey: .user)
             }
-//            ,
-//            fetchCoins: {
-//                guard let data = userDefaults.data(forKey: .coins) else {
-//                    return nil
-//                }
-//                return try decode(IdentifiedArrayOf<Coin>.self, from: data)
-//                
-//            },
-//            insertCoin: { coin in
-//                guard let data = userDefaults.data(forKey: .coins) else {
-//                    return nil
-//                }
-//                var coins = try decode(IdentifiedArrayOf<Coin>.self, from: data)
-//                coins.append(coin)
-//                
-//                userDefaults.set(try encode(coins), forKey: .coins)
-//                return coins
-//            },
-//            deleteCoin: { coin in
-//                guard let data = userDefaults.data(forKey: .coins) else {
-//                    return []
-//                }
-//                var coins = try decode(IdentifiedArrayOf<Coin>.self, from: data)
-//                coins.remove(id: coin.id)
-//                userDefaults.set(try encode(coins), forKey: .coins)
-//                return coins
-//            }
+            //            ,
+            //            fetchCoins: {
+            //                guard let data = userDefaults.data(forKey: .coins) else {
+            //                    return nil
+            //                }
+            //                return try decode(IdentifiedArrayOf<Coin>.self, from: data)
+            //                
+            //            },
+            //            insertCoin: { coin in
+            //                guard let data = userDefaults.data(forKey: .coins) else {
+            //                    return nil
+            //                }
+            //                var coins = try decode(IdentifiedArrayOf<Coin>.self, from: data)
+            //                coins.append(coin)
+            //                
+            //                userDefaults.set(try encode(coins), forKey: .coins)
+            //                return coins
+            //            },
+            //            deleteCoin: { coin in
+            //                guard let data = userDefaults.data(forKey: .coins) else {
+            //                    return []
+            //                }
+            //                var coins = try decode(IdentifiedArrayOf<Coin>.self, from: data)
+            //                coins.remove(id: coin.id)
+            //                userDefaults.set(try encode(coins), forKey: .coins)
+            //                return coins
+            //            }
         )
     }
 }
@@ -92,12 +97,13 @@ extension DependencyValues {
 extension DataManager {
     public static let testValue = Self(
         fetchUser: unimplemented("\(Self.self).fetchUser"),
-        addUser: unimplemented("\(Self.self).addUser")
-//        fetchCoins: unimplemented("\(Self.self).fetchCoins"),
-//        insertCoin: unimplemented("\(Self.self).insertCoin"),
-//        deleteCoin: unimplemented("\(Self.self).deleteCoin")
+        addUser: unimplemented("\(Self.self).addUser"), 
+        logOutUser: unimplemented("\(Self.self).logOutUser")
+        //        fetchCoins: unimplemented("\(Self.self).fetchCoins"),
+        //        insertCoin: unimplemented("\(Self.self).insertCoin"),
+        //        deleteCoin: unimplemented("\(Self.self).deleteCoin")
     )
-        
+    
 }
 
 fileprivate extension String {
@@ -106,7 +112,7 @@ fileprivate extension String {
     static let wallet: String = "Wallet"
 }
 
-public struct User: Codable, Equatable {
+public struct User: Codable, Equatable, Sendable {
     public let id: UUID
     public var firstName: String
     public var lastName: String
