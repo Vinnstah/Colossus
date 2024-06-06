@@ -50,6 +50,10 @@ public struct AppFeature {
                 state = .main(MainFeature.State(user: user))
                 return .none
                 
+            case .main(.delegate(.logOut)):
+                state = .onboarding(.init(user: Shared(User(id: .init(), firstName: "", lastName: "", topics: []))))
+                return .none
+                
             case .splash, .main, .onboarding:
                 return .none
             }

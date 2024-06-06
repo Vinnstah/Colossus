@@ -11,26 +11,26 @@ extension MainFeature {
             GeometryReader { geo in
                 NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
                     ZStack {
-                        Color("Background").ignoresSafeArea()
+                        Color("Background")
+                            .ignoresSafeArea()
                         VStack {
                             cryptoScrollView()
                                 .frame(
-                                    height: store.isExpandingCryptoScrollView ? (geo.size.height / 1.5) : geo.size.height / 3
+                                    height: store.isExpandingCryptoScrollView ? (geo.size.height / 1.3) : geo.size.height / 2
                                 )
-                                .animation(.easeIn, value: store.isExpandingCryptoScrollView)
+                                .animation(.easeIn(duration: 0.5), value: store.isExpandingCryptoScrollView)
                                 .padding(.bottom, 25)
                                 .padding(.horizontal, 10)
                             
-                            MyAssets(assets: store.orderBooks)
+                            MyAssets(assets: [])
                             Spacer()
                         }
                         .toolbar {
                             ToolbarItem {
                                 Button(action: {
-                                    // Navigate to Wallet
-                                    fatalError()
+                                    send(.logOutTapped)
                                 }, label: {
-                                    Image(systemName: "wallet.fill")
+                                    Text("Log Out")
                                         .foregroundStyle(Color.indigo.opacity(50))
                                 })
                             }
@@ -58,30 +58,21 @@ extension MainFeature.View {
     func cryptoScrollView() -> some View {
         VStack {
             Section {
-                Header()
                 ScrollView {
-                    ForEach(store.orderBooks, id: \.self) { orderBook in
-                        SymbolItem(orderBook: orderBook)
+                    ForEach(store.coins) { coin in
+                        SymbolItem(coin: coin)
                             .onTapGesture {
-                                send(.inspectCoinTapped(orderBook))
+                                send(.inspectCoinTapped(coin))
                             }
                     }
                 }
             } header: {
                 HStack {
-                    //                                Picker("Choose a topic", selection: $store.selectedTopic.rawValue) {
-                    //                                    ForEach(store.user.topics, id: \.self) {
-                    //                                        Text($0.rawValue)
-                    //                                            .foregroundStyle(Color.white)
-                    //                                                }
-                    //                                            }
-                    //                                .pickerStyle(.menu)
-                    
                     Text("Crypto")
                         .foregroundStyle(Color.white)
                         .padding(.leading, 10)
                     Spacer()
-                    Button(store.isExpandingCryptoScrollView ? "Collapse" : "See all") {
+                    Button(store.isExpandingCryptoScrollView ? "Collapse" : "Expand") {
                         send(.seeAllTapped)
                     }
                     .buttonStyle(BorderlessButtonStyle())

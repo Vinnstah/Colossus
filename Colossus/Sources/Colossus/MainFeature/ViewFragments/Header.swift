@@ -1,16 +1,17 @@
 import SwiftUI
 import Foundation
 
-struct Header: View {
-    var body: some View {
+extension MainFeature.View {
+    @ViewBuilder
+    func header() -> some View {
         HStack(spacing: 30) {
-            Text("Name")
-                .foregroundStyle(Color("AccentColor"))
-            Spacer()
-            Text("Bid")
-                .foregroundStyle(Color("AccentColor"))
-            Text("Ask")
-                .foregroundStyle(Color("AccentColor"))
+            Picker("Time Interval", selection: $store.timeInterval) {
+                ForEach(TimeIntervalMilliseconds.allCases, id: \.self) {
+                    Text($0.descrition)
+                        .foregroundStyle(Color.black)
+                }
+            }
+            .pickerStyle(.segmented)
         }
         .padding(.leading)
         .padding(.trailing, 50)

@@ -59,7 +59,7 @@ public struct CustomizeHome {
                     }
                     .listRowBackground(Color("Background").opacity(10))
                 }
-             
+                
                 
                 Button(
                     action: { store.send(.nextButtonTapped) },
